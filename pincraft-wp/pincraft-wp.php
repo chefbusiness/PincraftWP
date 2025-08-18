@@ -240,7 +240,7 @@ add_filter('plugin_row_meta', 'pincraft_plugin_row_meta', 10, 2);
 add_action('wp_ajax_pincraft_search_posts', 'pincraft_ajax_search_posts');
 function pincraft_ajax_search_posts() {
     // Verificar nonce
-    if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'pincraft_ajax_nonce')) {
+    if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'pincraft_search')) {
         wp_die('Security check failed');
     }
     
@@ -249,37 +249,40 @@ function pincraft_ajax_search_posts() {
         wp_die('Permission denied');
     }
     
-    $search = sanitize_text_field($_POST['search']);
+    $query = sanitize_text_field($_POST['query']);
     
-    $args = array(
+    if (empty($query) || strlen($query) < 2) {
+        wp_send_json_error('Query too short');
+    }
+    
+    // Buscar posts
+    $posts = get_posts(array(
         'post_type' => 'post',
         'post_status' => 'publish',
-        's' => $search,
-        'posts_per_page' => 20,
+        'numberposts' => 10,
+        's' => $query,
         'orderby' => 'date',
         'order' => 'DESC'
-    );
+    ));
     
-    $posts = get_posts($args);
     $results = array();
-    
     foreach ($posts as $post) {
         $results[] = array(
-            'id' => $post->ID,
-            'title' => $post->post_title,
-            'date' => get_the_date('Y-m-d', $post),
-            'excerpt' => wp_trim_words($post->post_excerpt ?: $post->post_content, 20),
-            'featured_image' => get_the_post_thumbnail_url($post->ID, 'thumbnail')
+            'ID' => $post->ID,
+            'post_title' => $post->post_title,
+            'post_date' => get_the_date('Y-m-d H:i', $post->ID),
+            'post_excerpt' => wp_trim_words($post->post_content, 20)
         );
     }
     
-    wp_send_json_success($results);
+    wp_send_json_success(array('posts' => $results));
 }
 
+// Handler para generar pines con nuevos parámetros
 add_action('wp_ajax_pincraft_generate_pins', 'pincraft_ajax_generate_pins');
 function pincraft_ajax_generate_pins() {
     // Verificar nonce
-    if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'pincraft_ajax_nonce')) {
+    if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'pincraft_generate')) {
         wp_send_json_error('Security check failed');
     }
     
@@ -290,7 +293,9 @@ function pincraft_ajax_generate_pins() {
     
     $post_id = intval($_POST['post_id']);
     $pin_count = intval($_POST['pin_count']);
-    $style = sanitize_text_field($_POST['style']);
+    $sector = sanitize_text_field($_POST['sector']);
+    $with_text = isset($_POST['with_text']) && $_POST['with_text'] == '1';
+    $show_domain = isset($_POST['show_domain']) && $_POST['show_domain'] == '1';
     
     // Validar entrada
     if (!$post_id || $pin_count < 1 || $pin_count > 10) {
@@ -299,10 +304,10 @@ function pincraft_ajax_generate_pins() {
     
     // Inicializar generador
     $generator = new Pincraft_Generator();
-    $result = $generator->generate_pins($post_id, $pin_count, $style);
+    $result = $generator->generate_pins($post_id, $pin_count, 'modern', $sector, $with_text, $show_domain);
     
     if ($result['success']) {
-        wp_send_json_success($result['data']);
+        wp_send_json_success($result);
     } else {
         wp_send_json_error($result['message']);
     }

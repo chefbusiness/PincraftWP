@@ -44,33 +44,70 @@ if (!defined('ABSPATH')) {
             <form id="pincraft-generate-form">
                 <table class="form-table">
                     <tr>
-                        <th scope="row">Seleccionar Artículo</th>
+                        <th scope="row">🔍 Buscar Artículo</th>
                         <td>
-                            <select id="pincraft-post-selector" name="post_id" class="regular-text" required>
-                                <option value="">-- Seleccionar artículo --</option>
-                                <?php
-                                $posts = get_posts(array(
-                                    'numberposts' => 50,
-                                    'post_status' => 'publish',
-                                    'post_type' => 'post'
-                                ));
-                                
-                                foreach($posts as $post) {
-                                    echo '<option value="' . $post->ID . '">' . esc_html($post->post_title) . '</option>';
-                                }
-                                ?>
-                            </select>
-                            <p class="description">Selecciona el artículo para generar pines</p>
+                            <input type="text" id="pincraft-post-search" class="regular-text" placeholder="Escribe para buscar..." />
+                            <input type="hidden" id="pincraft-post-id" name="post_id" />
+                            <div id="search-results" style="display:none; border: 1px solid #ddd; max-height: 200px; overflow-y: auto; margin-top: 5px;"></div>
+                            <p class="description">Busca y selecciona el artículo para generar pines</p>
                         </td>
                     </tr>
                     
                     <tr>
-                        <th scope="row">Cantidad de Pines</th>
+                        <th scope="row">📂 Sector/Nicho</th>
+                        <td>
+                            <select id="pincraft-sector" name="sector" class="regular-text" required>
+                                <option value="">-- Seleccionar sector --</option>
+                                <option value="decoracion_hogar">🏠 Decoración del Hogar y DIY</option>
+                                <option value="recetas_comida">🍲 Recetas y Comida</option>
+                                <option value="moda_femenina">👗 Moda Femenina</option>
+                                <option value="belleza_cuidado">💄 Belleza y Cuidado Personal</option>
+                                <option value="bodas_eventos">👰 Bodas y Eventos</option>
+                                <option value="maternidad_bebes">👶 Maternidad y Bebés</option>
+                                <option value="viajes_aventuras">✈️ Viajes y Aventuras</option>
+                                <option value="fitness_ejercicio">💪 Fitness y Ejercicio</option>
+                                <option value="salud_bienestar">🧘 Salud y Bienestar</option>
+                                <option value="negocios_emprendimiento">💼 Negocios y Emprendimiento</option>
+                                <option value="educacion_aprendizaje">📚 Educación y Aprendizaje</option>
+                                <option value="arte_creatividad">🎨 Arte y Creatividad</option>
+                                <option value="tecnologia_gadgets">💻 Tecnología y Gadgets</option>
+                                <option value="jardin_plantas">🌱 Jardín y Plantas</option>
+                                <option value="mascotas_animales">🐕 Mascotas y Animales</option>
+                            </select>
+                            <p class="description">Selecciona el sector para optimizar el estilo del pin</p>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <th scope="row">📊 Cantidad de Pines</th>
                         <td>
                             <input type="range" id="pincraft-pin-count" name="pin_count" 
                                    min="1" max="10" value="4" class="regular-text" />
                             <span id="pin-count-display">4</span> pines
                             <p class="description">Desliza para seleccionar cuántos pines generar (1-10)</p>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <th scope="row">⚙️ Opciones de Imagen</th>
+                        <td>
+                            <label class="toggle-container">
+                                <input type="checkbox" id="pincraft-with-text" name="with_text" checked />
+                                <span class="toggle-slider"></span>
+                                <span class="toggle-label">🔤 Incluir texto en la imagen</span>
+                            </label>
+                            <br><br>
+                            
+                            <label class="toggle-container">
+                                <input type="checkbox" id="pincraft-show-domain" name="show_domain" checked />
+                                <span class="toggle-slider"></span>
+                                <span class="toggle-label">🌐 Mostrar dominio como marca de agua</span>
+                            </label>
+                            
+                            <p class="description">
+                                • Texto: Si está desactivado, genera imágenes puramente visuales sin texto<br>
+                                • Dominio: Muestra tu sitio web como marca de agua discreta
+                            </p>
                         </td>
                     </tr>
                     
@@ -146,6 +183,85 @@ if (!defined('ABSPATH')) {
 .error {
     color: #dc3232;
 }
+
+/* Toggle Switches */
+.toggle-container {
+    display: flex;
+    align-items: center;
+    margin: 5px 0;
+}
+
+.toggle-container input[type="checkbox"] {
+    display: none;
+}
+
+.toggle-slider {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+    background-color: #ccc;
+    border-radius: 24px;
+    transition: background-color 0.3s;
+    margin-right: 10px;
+}
+
+.toggle-slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    top: 3px;
+    background-color: white;
+    border-radius: 50%;
+    transition: transform 0.3s;
+}
+
+.toggle-container input[type="checkbox"]:checked + .toggle-slider {
+    background-color: #0073aa;
+}
+
+.toggle-container input[type="checkbox"]:checked + .toggle-slider:before {
+    transform: translateX(26px);
+}
+
+.toggle-label {
+    font-weight: 500;
+    color: #333;
+}
+
+#search-results {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.search-result-item {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+}
+
+.search-result-item:hover {
+    background: #f0f0f1;
+}
+
+.search-result-item:last-child {
+    border-bottom: none;
+}
+
+.search-result-title {
+    font-weight: 500;
+    color: #0073aa;
+}
+
+.search-result-date {
+    color: #666;
+    font-size: 12px;
+}
 </style>
 
 <script>
@@ -155,42 +271,98 @@ jQuery(document).ready(function($) {
         $('#pin-count-display').text($(this).val());
     });
     
-    // Vista previa del artículo
-    $('#pincraft-post-selector').on('change', function() {
-        const postId = $(this).val();
-        if (postId) {
-            // Hacer petición AJAX para obtener datos del post
+    // Buscador de posts con autocompletado
+    let searchTimeout;
+    $('#pincraft-post-search').on('input', function() {
+        const query = $(this).val();
+        
+        clearTimeout(searchTimeout);
+        
+        if (query.length < 2) {
+            $('#search-results').hide();
+            return;
+        }
+        
+        searchTimeout = setTimeout(function() {
             $.ajax({
                 url: ajaxurl,
                 method: 'POST',
                 data: {
-                    action: 'pincraft_get_post_preview',
-                    post_id: postId,
-                    nonce: '<?php echo wp_create_nonce("pincraft_preview"); ?>'
+                    action: 'pincraft_search_posts',
+                    query: query,
+                    nonce: '<?php echo wp_create_nonce("pincraft_search"); ?>'
                 },
                 success: function(response) {
-                    if (response.success) {
-                        $('#preview-title').text(response.data.title);
-                        $('#preview-excerpt').text(response.data.excerpt);
-                        $('#preview-url').text(response.data.url);
-                        $('#post-preview').show();
+                    if (response.success && response.data.posts.length > 0) {
+                        let html = '';
+                        response.data.posts.forEach(function(post) {
+                            html += `<div class="search-result-item" data-id="${post.ID}">
+                                       <div class="search-result-title">${post.post_title}</div>
+                                       <div class="search-result-date">${post.post_date}</div>
+                                     </div>`;
+                        });
+                        $('#search-results').html(html).show();
+                    } else {
+                        $('#search-results').html('<div class="search-result-item">No se encontraron artículos</div>').show();
                     }
                 }
             });
-        } else {
-            $('#post-preview').hide();
+        }, 300);
+    });
+    
+    // Seleccionar post de los resultados
+    $(document).on('click', '.search-result-item', function() {
+        const postId = $(this).data('id');
+        const postTitle = $(this).find('.search-result-title').text();
+        
+        if (postId) {
+            $('#pincraft-post-id').val(postId);
+            $('#pincraft-post-search').val(postTitle);
+            $('#search-results').hide();
+            
+            // Mostrar vista previa
+            loadPostPreview(postId);
         }
     });
+    
+    // Función para cargar vista previa
+    function loadPostPreview(postId) {
+        $.ajax({
+            url: ajaxurl,
+            method: 'POST',
+            data: {
+                action: 'pincraft_get_post_preview',
+                post_id: postId,
+                nonce: '<?php echo wp_create_nonce("pincraft_preview"); ?>'
+            },
+            success: function(response) {
+                if (response.success) {
+                    $('#preview-title').text(response.data.title);
+                    $('#preview-excerpt').text(response.data.excerpt);
+                    $('#preview-url').text(response.data.url);
+                    $('#post-preview').show();
+                }
+            }
+        });
+    }
     
     // Generar pines
     $('#pincraft-generate-form').on('submit', function(e) {
         e.preventDefault();
         
-        const postId = $('#pincraft-post-selector').val();
+        const postId = $('#pincraft-post-id').val();
+        const sector = $('#pincraft-sector').val();
         const pinCount = $('#pincraft-pin-count').val();
+        const withText = $('#pincraft-with-text').is(':checked');
+        const showDomain = $('#pincraft-show-domain').is(':checked');
         
         if (!postId) {
-            alert('Por favor selecciona un artículo');
+            alert('Por favor busca y selecciona un artículo');
+            return;
+        }
+        
+        if (!sector) {
+            alert('Por favor selecciona un sector/nicho');
             return;
         }
         
@@ -205,7 +377,10 @@ jQuery(document).ready(function($) {
             data: {
                 action: 'pincraft_generate_pins',
                 post_id: postId,
+                sector: sector,
                 pin_count: pinCount,
+                with_text: withText ? 1 : 0,
+                show_domain: showDomain ? 1 : 0,
                 nonce: '<?php echo wp_create_nonce("pincraft_generate"); ?>'
             },
             timeout: 60000, // 60 segundos

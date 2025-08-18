@@ -16,7 +16,7 @@ class Pincraft_Generator {
     /**
      * Generar pines para un post
      */
-    public function generate_pins($post_id, $pin_count, $style = 'modern') {
+    public function generate_pins($post_id, $pin_count, $style = 'modern', $sector = null, $with_text = true, $show_domain = true) {
         // Verificar API key
         if (empty($this->api_key)) {
             return array(
@@ -45,6 +45,9 @@ class Pincraft_Generator {
             'domain' => $domain,
             'count' => intval($pin_count),
             'style' => $style,
+            'sector' => $sector,
+            'with_text' => $with_text,
+            'show_domain' => $show_domain,
             'post_url' => get_permalink($post_id)
         );
         
@@ -52,7 +55,7 @@ class Pincraft_Generator {
         $response = wp_remote_post($this->api_endpoint . '/pins/generate', array(
             'headers' => array(
                 'Content-Type' => 'application/json',
-                'X-API-Key' => $this->api_key
+                'x-api-key' => $this->api_key
             ),
             'body' => json_encode($request_data),
             'timeout' => 120 // 2 minutos para generación de imágenes

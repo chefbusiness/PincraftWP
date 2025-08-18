@@ -1,6 +1,7 @@
 const Replicate = require('replicate');
 const OpenAI = require('openai');
 const db = require('../config/database');
+const { SECTORS } = require('../config/sectors');
 
 // Inicializar APIs
 const replicate = new Replicate({
@@ -23,7 +24,10 @@ exports.generatePins = async (req, res) => {
       content = '', 
       domain, 
       count = 1,
-      style = 'modern'
+      style = 'modern',
+      sector = null,
+      show_domain = true,
+      with_text = true
     } = req.body;
 
     const userId = req.user.id;
@@ -42,33 +46,53 @@ exports.generatePins = async (req, res) => {
     
     // Generar texto optimizado para Pinterest
     console.log('📝 Generating Pinterest text...');
+    console.log('🎯 Selected sector:', sector);
+    
+    // Usar configuración del sector si está especificado
+    const sectorConfig = sector && SECTORS[sector] ? SECTORS[sector] : null;
+    
+    let systemPrompt, userPrompt;
+    
+    if (sectorConfig) {
+      // Usar prompts específicos del sector
+      systemPrompt = `${sectorConfig.openai.system} 
+                     Crea contenido con tono: ${sectorConfig.openai.tone}.
+                     Usa estas palabras clave cuando sea relevante: ${sectorConfig.openai.keywords.join(', ')}.`;
+      
+      userPrompt = `Crea un pin optimizado para el sector "${sectorConfig.name}":
+                   
+                   Título del post: ${title}
+                   Contenido: ${content}
+                   Dominio: ${show_domain ? domain : '[sin dominio]'}
+                   
+                   Genera:
+                   Título Pinterest: [máximo 100 caracteres, optimizado para ${sectorConfig.name}]
+                   Descripción: [máximo 500 caracteres, incluye estos hashtags: ${sectorConfig.hashtags.join(' ')}]
+                   Call-to-action: [frase motivadora relacionada con ${sectorConfig.name}]`;
+    } else {
+      // Prompts genéricos con detección automática
+      systemPrompt = `Eres un experto en marketing de Pinterest. Tu trabajo es:
+                     1. DETECTAR automáticamente el tipo de contenido
+                     2. ADAPTAR el estilo según el tipo detectado
+                     3. CREAR títulos y descripciones optimizados`;
+      
+      userPrompt = `Analiza este contenido y crea un pin optimizado:
+                   
+                   Título: ${title}
+                   Contenido: ${content}
+                   Dominio: ${show_domain ? domain : '[sin dominio]'}
+                   
+                   Genera:
+                   Tipo detectado: [tipo de contenido]
+                   Título Pinterest: [máximo 100 caracteres]
+                   Descripción: [máximo 500 caracteres con hashtags]`;
+    }
     
     const completion = await openai.chat.completions.create({
       model: "gpt-3.5-turbo",
       messages: [
-        {
-          role: "system",
-          content: `Eres un experto en marketing de Pinterest. Tu trabajo es:
-          1. DETECTAR automáticamente el tipo de contenido (receta, tutorial, información, producto, etc)
-          2. ADAPTAR el estilo según el tipo detectado
-          3. CREAR títulos y descripciones optimizados para ese tipo específico de contenido
-          4. USAR el tono y lenguaje apropiado para cada nicho`
-        },
-        {
-          role: "user",
-          content: `Analiza este contenido y crea un pin optimizado:
-          
-          Título: ${title}
-          Contenido: ${content}
-          Dominio: ${domain}
-          
-          PRIMERO identifica el tipo de contenido, LUEGO genera:
-          
-          Tipo: [receta/tutorial/información/producto/lifestyle/otro]
-          Título: [título optimizado según el tipo, máximo 100 caracteres]
-          Descripción: [descripción adaptada al tipo de contenido, máximo 500 caracteres con hashtags relevantes]
-          Estilo Visual: [sugerencia de estilo para la imagen: minimalista/colorido/elegante/rústico/moderno]`
-        }
+        { role: "system", content: systemPrompt },
+        { role: "user", content: userPrompt }
       ],
       max_tokens: 400
     });
@@ -76,28 +100,46 @@ exports.generatePins = async (req, res) => {
     const optimizedText = completion.choices[0].message.content;
     console.log('✅ OpenAI text generated:', optimizedText);
 
-    // Extraer tipo de contenido y estilo visual del texto optimizado
-    const contentType = optimizedText.match(/Tipo:\s*([^\n]+)/)?.[1] || 'general';
-    const visualStyle = optimizedText.match(/Estilo Visual:\s*([^\n]+)/)?.[1] || 'moderno';
-    
     // Generar imagen con Ideogram
     console.log('🎨 Generating image with Ideogram...');
-    console.log('📝 Content type detected:', contentType);
-    console.log('🎨 Visual style:', visualStyle);
+    console.log('🔤 With text overlay:', with_text);
+    console.log('🌐 Show domain:', show_domain);
     
-    // Adaptar el prompt según el tipo de contenido
-    let imagePromptBase = {
-      'receta': `Delicious food photography, ingredients visible, warm lighting, cooking process`,
-      'tutorial': `Step-by-step visual guide, clear instructions, numbered steps, educational`,
-      'información': `Infographic style, data visualization, clean layout, professional`,
-      'producto': `Product showcase, lifestyle photography, brand aesthetics, commercial quality`,
-      'lifestyle': `Aspirational imagery, aesthetic photography, mood board style`,
-      'otro': `Creative design, eye-catching visuals, Pinterest-optimized`
-    };
+    let imagePrompt;
     
-    const contextPrompt = imagePromptBase[contentType.toLowerCase()] || imagePromptBase['otro'];
-    
-    const imagePrompt = `Pinterest pin design: ${title}. ${contextPrompt}. Style: ${visualStyle}. Vertical 9:16 layout. Text overlay with readable typography. High engagement design optimized for Pinterest clicks and saves.`;
+    if (sectorConfig) {
+      // Usar configuración específica del sector
+      const textOverlay = with_text ? 
+        `Text overlay with "${title}". Readable typography, clear hierarchy.` : 
+        'NO text overlay, purely visual design, no words or letters.';
+      
+      const domainWatermark = show_domain && with_text ? 
+        `Small watermark with "${domain}" at bottom.` : 
+        'No watermark or domain visible.';
+      
+      imagePrompt = `Pinterest pin for ${sectorConfig.name}. 
+                    ${sectorConfig.ideogram.base}. 
+                    ${sectorConfig.ideogram.style}. 
+                    ${sectorConfig.ideogram.elements}.
+                    ${textOverlay}
+                    ${domainWatermark}
+                    Vertical 9:16 format optimized for Pinterest.`;
+    } else {
+      // Prompt genérico adaptativo
+      const textOverlay = with_text ? 
+        `Text overlay with title "${title}". Clear, readable typography.` : 
+        'NO text, purely visual imagery, no words.';
+      
+      const domainWatermark = show_domain && with_text ? 
+        `Include small "${domain}" watermark.` : 
+        '';
+      
+      imagePrompt = `Beautiful Pinterest pin design. 
+                    ${textOverlay}
+                    ${domainWatermark}
+                    Modern, eye-catching, vertical 9:16 layout. 
+                    Professional design optimized for Pinterest engagement.`;
+    }
 
     const output = await replicate.run(
       "ideogram-ai/ideogram-v3-turbo:32a9584617b239dd119c773c8c18298d310068863d26499e6199538e9c29a586",
