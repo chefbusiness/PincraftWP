@@ -15,7 +15,8 @@
       "WebFetch(domain:pincraftwp-production.up.railway.app)",
       "Bash(PGPASSWORD=KnudYxtYmvAFDohmMuxZuXxlRJBgtgVw psql -h shuttle.proxy.rlwy.net -U postgres -p 38924 -d railway -c \"INSERT INTO users (email, password_hash, api_key, plan_type, monthly_credits) VALUES (''test@example.com'', ''$2a$12$dummy.hash.for.password123'', ''pk_test_'' || substring(md5(random()::text) from 1 for 24), ''pro'', 200); SELECT email, api_key, plan_type, monthly_credits FROM users WHERE email = ''test@example.com'';\")",
       "Bash(PGPASSWORD=KnudYxtYmvAFDohmMuxZuXxlRJBgtgVw psql -h shuttle.proxy.rlwy.net -U postgres -p 38924 -d railway -c \"SELECT email, api_key, plan_type, is_active FROM users WHERE api_key = ''pk_test_deed55b71577916257060f2e'';\")",
-      "Bash(chmod:*)"
+      "Bash(chmod:*)",
+      "WebFetch(domain:replicate.com)"
     ],
     "deny": [],
     "ask": [],
