@@ -78,7 +78,7 @@ exports.generatePins = async (req, res) => {
       {
         input: {
           prompt: imagePrompt,
-          aspect_ratio: "9:16",
+          aspect_ratio: "ASPECT_9_16",
           style_type: "None",
           magic_prompt_option: "Auto"
         }
