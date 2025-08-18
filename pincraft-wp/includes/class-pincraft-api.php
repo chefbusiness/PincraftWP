@@ -19,7 +19,7 @@ class Pincraft_API {
     /**
      * URL base de la API
      */
-    private $api_base_url = 'https://api.pincraftwp.com/v1/';
+    private $api_base_url;
     
     /**
      * Timeout para requests
@@ -31,6 +31,7 @@ class Pincraft_API {
      */
     public function __construct() {
         $this->api_key = get_option('pincraft_api_key', '');
+        $this->api_base_url = get_option('pincraft_api_endpoint', 'https://pincraftwp-production.up.railway.app/api/v1') . '/';
     }
     
     /**

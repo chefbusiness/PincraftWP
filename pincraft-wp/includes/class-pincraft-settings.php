@@ -3,6 +3,11 @@
  * Clase para gestionar la configuración del plugin
  */
 
+// Prevenir acceso directo
+if (!defined('ABSPATH')) {
+    exit;
+}
+
 class Pincraft_Settings {
     
     private $api_endpoint;
@@ -45,7 +50,7 @@ class Pincraft_Settings {
         ));
         
         register_setting('pincraft_settings', 'pincraft_api_endpoint', array(
-            'default' => 'https://api.pincraftwp.com/api/v1',
+            'default' => 'https://pincraftwp-production.up.railway.app/api/v1',
             'sanitize_callback' => 'esc_url_raw'
         ));
         

@@ -1,0 +1,452 @@
+/**
+ * Estilos CSS para PincraftWP Admin
+ */
+
+.pincraft-card {
+    background: #fff;
+    border: 1px solid #ccd0d4;
+    border-radius: 4px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 1px rgba(0,0,0,.04);
+}
+
+.pincraft-card h2 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 18px;
+    font-weight: 600;
+    color: #1d2327;
+}
+
+/* Controles de cantidad */
+#pincraft-pin-count {
+    width: 200px;
+    margin-right: 10px;
+}
+
+#pin-count-display {
+    font-weight: bold;
+    color: #0073aa;
+    font-size: 16px;
+}
+
+/* Buscador de posts */
+#search-results {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    max-height: 200px;
+    overflow-y: auto;
+    margin-top: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.search-result-item {
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.search-result-item:hover {
+    background: #f0f0f1;
+}
+
+.search-result-item:last-child {
+    border-bottom: none;
+}
+
+.search-result-title {
+    font-weight: 500;
+    color: #0073aa;
+    margin-bottom: 4px;
+}
+
+.search-result-date {
+    color: #666;
+    font-size: 12px;
+}
+
+/* Vista previa del post */
+#post-preview {
+    background: #f9f9f9;
+    padding: 15px;
+    border-left: 4px solid #0073aa;
+    margin-top: 10px;
+    border-radius: 0 4px 4px 0;
+}
+
+#post-preview h4 {
+    margin: 0 0 8px 0;
+    color: #1d2327;
+}
+
+#post-preview p {
+    margin: 0 0 5px 0;
+    color: #50575e;
+}
+
+#post-preview small {
+    color: #787c82;
+}
+
+/* Estados de generación */
+.generating {
+    color: #0073aa;
+    font-weight: 500;
+}
+
+.success {
+    color: #46b450;
+    font-weight: 500;
+}
+
+.error {
+    color: #dc3232;
+    font-weight: 500;
+}
+
+/* Botones mejorados */
+.button-primary {
+    background: linear-gradient(135deg, #0073aa 0%, #005a87 100%);
+    border: none;
+    text-shadow: none;
+    box-shadow: 0 2px 4px rgba(0,115,170,0.3);
+    transition: all 0.2s ease;
+}
+
+.button-primary:hover {
+    background: linear-gradient(135deg, #005a87 0%, #004066 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0,115,170,0.4);
+}
+
+/* Formularios mejorados */
+.form-table th {
+    font-weight: 600;
+    color: #1d2327;
+    padding: 20px 10px 20px 0;
+}
+
+.form-table td {
+    padding: 15px 10px;
+}
+
+.form-table .description {
+    color: #646970;
+    font-size: 13px;
+    line-height: 1.4;
+    margin-top: 5px;
+}
+
+/* Selectores */
+select.regular-text {
+    padding: 8px 12px;
+    border: 1px solid #8c8f94;
+    border-radius: 4px;
+    font-size: 14px;
+    background: white;
+}
+
+select.regular-text:focus {
+    border-color: #0073aa;
+    outline: none;
+    box-shadow: 0 0 0 1px #0073aa;
+}
+
+/* Checkboxes mejorados */
+input[type="checkbox"] {
+    margin-right: 8px;
+    transform: scale(1.1);
+}
+
+/* Estados del sistema */
+.status-ok {
+    color: #46b450;
+    font-weight: 500;
+}
+
+.status-error {
+    color: #dc3232;
+    font-weight: 500;
+}
+
+.status-warning {
+    color: #ffb900;
+    font-weight: 500;
+}
+
+/* Tabla de historial */
+.wp-list-table {
+    margin-top: 20px;
+}
+
+.wp-list-table th {
+    background: #f1f1f1;
+    font-weight: 600;
+    padding: 12px;
+}
+
+.wp-list-table td {
+    padding: 12px;
+    border-bottom: 1px solid #e1e1e1;
+}
+
+.wp-list-table tbody tr:hover {
+    background: #f9f9f9;
+}
+
+/* Links mejorados */
+a {
+    color: #0073aa;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+a:hover {
+    color: #005a87;
+    text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 782px) {
+    .form-table th,
+    .form-table td {
+        display: block;
+        width: 100%;
+        padding: 10px 0;
+    }
+    
+    .form-table th {
+        border-bottom: none;
+    }
+    
+    .regular-text {
+        width: 100%;
+        max-width: 400px;
+    }
+    
+    #pincraft-pin-count {
+        width: 100%;
+        max-width: 300px;
+    }
+}
+
+/* Animaciones sutiles */
+.pincraft-card {
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Mejoras de UX */
+.search-result-item {
+    position: relative;
+}
+
+.search-result-item::after {
+    content: '→';
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    color: #0073aa;
+    font-weight: bold;
+}
+
+.search-result-item:hover::after {
+    opacity: 1;
+}
+
+/* Código inline */
+code {
+    background: #f1f1f1;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-family: Monaco, Consolas, monospace;
+    font-size: 13px;
+}
+
+/* Vista previa de pines generados */
+.pin-preview-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.pin-preview-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 12px;
+    background: #f9f9f9;
+    max-width: 220px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: all 0.2s ease;
+}
+
+.pin-preview-card:hover {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    transform: translateY(-2px);
+}
+
+.pin-preview-image {
+    width: 100%;
+    height: auto;
+    border-radius: 6px;
+    margin-bottom: 10px;
+    border: 1px solid #eee;
+}
+
+.pin-preview-title {
+    font-weight: 600;
+    color: #1d2327;
+    margin-bottom: 6px;
+    font-size: 14px;
+}
+
+.pin-preview-status {
+    font-size: 11px;
+    font-weight: 500;
+    margin-bottom: 8px;
+}
+
+.pin-preview-actions {
+    font-size: 11px;
+}
+
+.pin-preview-actions a {
+    color: #0073aa;
+    text-decoration: none;
+    margin: 0 2px;
+}
+
+.pin-preview-actions a:hover {
+    text-decoration: underline;
+}
+
+/* Pinterest content styles */
+.pinterest-content {
+    margin-top: 12px;
+    padding: 12px;
+    background: #f8f9fa;
+    border-radius: 6px;
+    border: 1px solid #e1e5e9;
+}
+
+.pinterest-title-section,
+.pinterest-desc-section {
+    margin-bottom: 12px;
+}
+
+.pinterest-title-section:last-child,
+.pinterest-desc-section:last-child {
+    margin-bottom: 0;
+}
+
+.pinterest-content label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #374151;
+}
+
+.pinterest-text-box {
+    background: white;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    padding: 8px 10px;
+    font-size: 12px;
+    line-height: 1.4;
+    color: #374151;
+    margin-bottom: 6px;
+    word-wrap: break-word;
+    min-height: 20px;
+}
+
+.copy-btn {
+    background: #0073aa;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-size: 10px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-block;
+}
+
+.copy-btn:hover {
+    background: #005a87;
+    transform: translateY(-1px);
+}
+
+.copy-btn:active {
+    transform: translateY(0);
+}
+
+/* Responsive adjustments for Pinterest content */
+@media (max-width: 782px) {
+    .pinterest-content {
+        padding: 10px;
+    }
+    
+    .pinterest-text-box {
+        font-size: 11px;
+        padding: 6px 8px;
+    }
+    
+    .copy-btn {
+        font-size: 9px;
+        padding: 3px 6px;
+    }
+}
+
+/* Badges */
+.pin-count-badge {
+    background: #0073aa;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+/* Loading states */
+.loading {
+    position: relative;
+}
+
+.loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 16px;
+    height: 16px;
+    margin: -8px 0 0 -8px;
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid #0073aa;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

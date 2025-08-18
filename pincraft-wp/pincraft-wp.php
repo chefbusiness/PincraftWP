@@ -23,12 +23,25 @@ define('PINCRAFT_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('PINCRAFT_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('PINCRAFT_PLUGIN_BASENAME', plugin_basename(__FILE__));
 
-// Cargar archivos principales
-require_once PINCRAFT_PLUGIN_DIR . 'includes/class-pincraft-core.php';
-require_once PINCRAFT_PLUGIN_DIR . 'includes/class-pincraft-admin.php';
-require_once PINCRAFT_PLUGIN_DIR . 'includes/class-pincraft-api.php';
-require_once PINCRAFT_PLUGIN_DIR . 'includes/class-pincraft-generator.php';
-require_once PINCRAFT_PLUGIN_DIR . 'includes/class-pincraft-settings.php';
+// Cargar archivos principales con verificación
+$required_files = array(
+    'includes/class-pincraft-core.php',
+    'includes/class-pincraft-admin.php',
+    'includes/class-pincraft-api.php',
+    'includes/class-pincraft-generator.php',
+    'includes/class-pincraft-settings.php'
+);
+
+foreach ($required_files as $file) {
+    $file_path = PINCRAFT_PLUGIN_DIR . $file;
+    if (file_exists($file_path)) {
+        require_once $file_path;
+    } else {
+        add_action('admin_notices', function() use ($file) {
+            echo '<div class="notice notice-error"><p>PincraftWP: Archivo faltante - ' . esc_html($file) . '</p></div>';
+        });
+    }
+}
 
 // Función de activación
 function pincraft_activate() {
@@ -174,17 +187,31 @@ function pincraft_delete_directory($dir) {
 
 // Inicializar el plugin
 function pincraft_init() {
+    // Verificar que las clases existen antes de instanciarlas
+    if (!class_exists('Pincraft_Core') || !class_exists('Pincraft_Admin')) {
+        add_action('admin_notices', function() {
+            echo '<div class="notice notice-error"><p>PincraftWP: Error cargando clases del plugin. Desactiva y reactiva el plugin.</p></div>';
+        });
+        return;
+    }
+    
     // Cargar textdomain para traducciones
     load_plugin_textdomain('pincraft-wp', false, dirname(PINCRAFT_PLUGIN_BASENAME) . '/languages');
     
     // Inicializar clase principal
-    $pincraft = new Pincraft_Core();
-    $pincraft->init();
-    
-    // Inicializar admin si estamos en el dashboard
-    if (is_admin()) {
-        $pincraft_admin = new Pincraft_Admin();
-        $pincraft_admin->init();
+    try {
+        $pincraft = new Pincraft_Core();
+        $pincraft->init();
+        
+        // Inicializar admin si estamos en el dashboard
+        if (is_admin()) {
+            $pincraft_admin = new Pincraft_Admin();
+            $pincraft_admin->init();
+        }
+    } catch (Exception $e) {
+        add_action('admin_notices', function() use ($e) {
+            echo '<div class="notice notice-error"><p>PincraftWP Error: ' . esc_html($e->getMessage()) . '</p></div>';
+        });
     }
 }
 add_action('plugins_loaded', 'pincraft_init');

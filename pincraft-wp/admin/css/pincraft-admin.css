@@ -1,0 +1,422 @@
+/**
+ * Estilos CSS para el panel de administración de PincraftWP
+ */
+
+/* Estilos generales */
+.pincraft-admin {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+}
+
+/* Cards */
+.pincraft-card {
+    background: #fff;
+    border: 1px solid #ccd0d4;
+    border-radius: 4px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 1px rgba(0,0,0,.04);
+}
+
+.pincraft-card h2 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 18px;
+    font-weight: 600;
+    color: #1d2327;
+}
+
+/* Botones */
+.pincraft-button {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    color: white;
+    padding: 12px 24px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.pincraft-button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    color: white;
+}
+
+.pincraft-button:active {
+    transform: translateY(0);
+}
+
+.pincraft-button.secondary {
+    background: #f1f1f1;
+    color: #333;
+}
+
+.pincraft-button.secondary:hover {
+    background: #e1e1e1;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    color: #333;
+}
+
+/* Formularios */
+.pincraft-form-table {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.pincraft-form-table th {
+    width: 200px;
+    padding: 20px 10px 20px 0;
+    vertical-align: top;
+    font-weight: 600;
+    color: #1d2327;
+}
+
+.pincraft-form-table td {
+    padding: 15px 10px;
+    border-bottom: 1px solid #f0f0f1;
+}
+
+.pincraft-form-table .description {
+    font-size: 13px;
+    color: #646970;
+    margin-top: 5px;
+    line-height: 1.4;
+}
+
+/* Inputs */
+.pincraft-input {
+    border: 1px solid #8c8f94;
+    border-radius: 4px;
+    padding: 8px 12px;
+    font-size: 14px;
+    width: 300px;
+    transition: border-color 0.15s ease-in-out;
+}
+
+.pincraft-input:focus {
+    border-color: #2271b1;
+    outline: none;
+    box-shadow: 0 0 0 1px #2271b1;
+}
+
+/* Selector de sectores */
+.sector-selector {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 10px;
+    margin: 15px 0;
+}
+
+.sector-option {
+    padding: 12px;
+    border: 2px solid #e1e1e1;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center;
+    font-weight: 500;
+}
+
+.sector-option:hover {
+    border-color: #667eea;
+    background: #f8f9ff;
+}
+
+.sector-option.selected {
+    border-color: #667eea;
+    background: #667eea;
+    color: white;
+}
+
+/* Toggle switches */
+.pincraft-toggle {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+    margin-right: 10px;
+}
+
+.pincraft-toggle input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.pincraft-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 24px;
+}
+
+.pincraft-slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    top: 3px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .pincraft-slider {
+    background-color: #667eea;
+}
+
+input:checked + .pincraft-slider:before {
+    transform: translateX(26px);
+}
+
+/* Estados de carga */
+.pincraft-loading {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #667eea;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Estados de éxito/error */
+.pincraft-success {
+    color: #46b450;
+    font-weight: 500;
+}
+
+.pincraft-error {
+    color: #dc3232;
+    font-weight: 500;
+}
+
+.pincraft-warning {
+    color: #ffb900;
+    font-weight: 500;
+}
+
+/* Notificaciones */
+.pincraft-notice {
+    background: #fff;
+    border-left: 4px solid #667eea;
+    padding: 12px;
+    margin: 15px 0;
+    border-radius: 0 4px 4px 0;
+    box-shadow: 0 1px 1px rgba(0,0,0,.04);
+}
+
+.pincraft-notice.success {
+    border-left-color: #46b450;
+}
+
+.pincraft-notice.error {
+    border-left-color: #dc3232;
+}
+
+.pincraft-notice.warning {
+    border-left-color: #ffb900;
+}
+
+/* Galería de pines */
+.pins-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+    margin: 20px 0;
+}
+
+.pin-preview {
+    border: 1px solid #e1e1e1;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.2s ease;
+}
+
+.pin-preview:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.pin-preview img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.pin-preview .pin-info {
+    padding: 10px;
+    background: #f9f9f9;
+}
+
+.pin-preview .pin-title {
+    font-weight: 600;
+    margin-bottom: 5px;
+    font-size: 12px;
+}
+
+.pin-preview .pin-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.pin-preview .pin-actions a {
+    font-size: 11px;
+    padding: 4px 8px;
+    border-radius: 3px;
+    text-decoration: none;
+    background: #667eea;
+    color: white;
+    transition: background 0.2s ease;
+}
+
+.pin-preview .pin-actions a:hover {
+    background: #5a67d8;
+}
+
+/* Estadísticas */
+.pincraft-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin: 20px 0;
+}
+
+.stat-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.stat-number {
+    font-size: 32px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.stat-label {
+    font-size: 14px;
+    opacity: 0.9;
+}
+
+/* Responsive */
+@media (max-width: 782px) {
+    .pincraft-form-table th,
+    .pincraft-form-table td {
+        display: block;
+        width: 100%;
+        padding: 10px 0;
+    }
+    
+    .pincraft-form-table th {
+        border-bottom: none;
+    }
+    
+    .pincraft-input {
+        width: 100%;
+        max-width: 400px;
+    }
+    
+    .sector-selector {
+        grid-template-columns: 1fr;
+    }
+    
+    .pincraft-stats {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    }
+}
+
+/* Animaciones */
+.fadeIn {
+    animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.slideIn {
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+    from { transform: translateX(-20px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+/* Estilos para el selector de cantidad de pines */
+.pin-count-selector {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin: 15px 0;
+}
+
+.pin-count-slider {
+    flex: 1;
+    max-width: 300px;
+}
+
+.pin-count-display {
+    font-weight: bold;
+    font-size: 18px;
+    color: #667eea;
+    min-width: 60px;
+    text-align: center;
+    background: #f0f0f1;
+    padding: 8px 12px;
+    border-radius: 4px;
+}
+
+/* Personalización del slider */
+input[type="range"] {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 6px;
+    border-radius: 3px;
+    background: #e1e1e1;
+    outline: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #667eea;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+input[type="range"]::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #667eea;
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}

@@ -24,7 +24,7 @@ class Pincraft_Core {
     /**
      * URL base de la API de PincraftWP
      */
-    private $api_base_url = 'https://api.pincraftwp.com/v1/';
+    private $api_base_url = 'https://pincraftwp-production.up.railway.app/api/v1';
     
     /**
      * Constructor
