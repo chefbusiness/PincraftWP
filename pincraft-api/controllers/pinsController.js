@@ -14,8 +14,6 @@ const openai = new OpenAI({
 
 // Generar pines para Pinterest
 exports.generatePins = async (req, res) => {
-  const client = await db.getClient();
-  
   try {
     const { 
       title, 
@@ -27,6 +25,8 @@ exports.generatePins = async (req, res) => {
     } = req.body;
 
     const userId = req.user.id;
+
+    console.log('🎨 Pin generation request:', { userId, title, domain, count });
 
     // Validar parámetros
     if (!title || !domain) {
@@ -42,7 +42,7 @@ exports.generatePins = async (req, res) => {
     }
 
     // Verificar créditos disponibles
-    const userResult = await client.query(
+    const userResult = await db.query(
       'SELECT monthly_credits, credits_used, plan_type FROM users WHERE id = $1',
       [userId]
     );
