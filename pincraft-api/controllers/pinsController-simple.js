@@ -74,15 +74,15 @@ exports.generatePins = async (req, res) => {
     const imagePrompt = `Beautiful Pinterest pin design for "${title}". Modern, eye-catching, vertical layout. Text overlay with elegant typography. Color scheme: vibrant and engaging. Professional design for food/lifestyle content. 9:16 aspect ratio.`;
 
     const output = await replicate.run(
-      "ideogram-ai/ideogram-v3-turbo",
+      "stability-ai/sdxl:39ed52f2a78e934b3ba6e2a89f5b1c712de7dfea535525255b1aa35c5565e08b",
       {
         input: {
           prompt: imagePrompt,
-          aspect_ratio: "9:16",
           width: 1080,
           height: 1920,
-          style_type: "GENERAL",
-          magic_prompt_option: "ON"
+          num_inference_steps: 25,
+          guidance_scale: 7.5,
+          num_outputs: 1
         }
       }
     );
