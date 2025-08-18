@@ -117,12 +117,27 @@ exports.generatePins = async (req, res) => {
         }
         
         const completion = await openai.chat.completions.create({
-          model: "gpt-3.5-turbo",
+          model: "gpt-4o-mini",
           messages: [
-            { role: "system", content: systemPrompt },
+            { 
+              role: "system", 
+              content: `${systemPrompt}
+              
+              FORMATO DE RESPUESTA OBLIGATORIO:
+              Título Pinterest: [título optimizado de máximo 100 caracteres]
+              Descripción: [descripción optimizada de máximo 500 caracteres con hashtags relevantes]
+              Call-to-action: [frase motivadora de máximo 80 caracteres]
+              
+              REGLAS IMPORTANTES:
+              - El título debe ser llamativo y clickeable
+              - La descripción debe incluir hashtags relevantes (#palabra)  
+              - Usar emojis estratégicamente para aumentar engagement
+              - El contenido debe generar curiosidad y ganas de hacer clic
+              - Adaptar el tono al sector/nicho específico`
+            },
             { role: "user", content: userPrompt }
           ],
-          max_tokens: 400,
+          max_tokens: 600,
           temperature: 0.7 + (i * 0.1) // Aumentar variabilidad en cada pin
         });
 
