@@ -208,6 +208,19 @@ exports.generatePins = async (req, res) => {
         
         let imagePrompt;
         
+        // Declarar variables comunes una sola vez
+        const textOverlay = with_text ? 
+          `Professional typography overlay "${title}", trending Pinterest font styles, perfect hierarchy and readability` : 
+          'NO text overlay, purely visual composition, no words or letters visible';
+        
+        const domainWatermark = show_domain && with_text ? 
+          `Subtle elegant watermark "${domain}" at bottom corner, minimalist design` : 
+          'No watermark or domain text visible';
+        
+        // Aplicar paleta de colores
+        const selectedPalette = COLOR_PALETTES[color_palette] || COLOR_PALETTES.auto;
+        const colorStyle = selectedPalette.style;
+        
         if (sectorConfig) {
           // PROMPTS PROFESIONALES basados en análisis Pinterest
           const professionalTemplates = {
@@ -236,17 +249,7 @@ exports.generatePins = async (req, res) => {
           
           const currentTemplate = templates[i % templates.length];
           
-          const textOverlay = with_text ? 
-            `Bold typography overlay "${title}", elegant serif or modern sans-serif font, golden/cream color palette, perfect readability` : 
-            'NO text overlay, purely visual composition, no words or letters visible';
-          
-          const domainWatermark = show_domain && with_text ? 
-            `Subtle elegant watermark "${domain}" at bottom corner, minimalist design` : 
-            'No watermark or domain text visible';
-          
-          // Aplicar paleta de colores
-          const selectedPalette = COLOR_PALETTES[color_palette] || COLOR_PALETTES.auto;
-          const colorStyle = selectedPalette.style;
+          // Variables ya declaradas arriba
           
           imagePrompt = `Pinterest vertical pin 1000x2000px for ${sectorConfig.name}.
                         ${currentTemplate}.
@@ -268,17 +271,7 @@ exports.generatePins = async (req, res) => {
           
           const currentVariation = professionalVariations[i % professionalVariations.length];
           
-          const textOverlay = with_text ? 
-            `Professional typography overlay "${title}", trending Pinterest font styles, perfect hierarchy and readability` : 
-            'NO text overlay, purely visual composition, no words or letters visible';
-          
-          const domainWatermark = show_domain && with_text ? 
-            `Subtle elegant watermark "${domain}" at bottom corner` : 
-            'No watermark visible';
-          
-          // Aplicar paleta de colores
-          const selectedPalette = COLOR_PALETTES[color_palette] || COLOR_PALETTES.auto;
-          const colorStyle = selectedPalette.style;
+          // Variables ya declaradas arriba
           
           imagePrompt = `Pinterest vertical pin 1000x2000px, professional quality.
                         ${currentVariation}.
