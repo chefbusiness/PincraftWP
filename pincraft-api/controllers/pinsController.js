@@ -12,6 +12,64 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
+// SISTEMA DE PALETAS TRENDING (inspirado en Ideogram)
+const COLOR_PALETTES = {
+  ember: {
+    name: 'Ember',
+    colors: ['#C44536', '#D4A574', '#8B4513', '#CD853F'],
+    description: 'Warm coral, terracotta, golden, burgundy tones',
+    style: 'warm golden hour lighting, ember and terracotta color palette, cozy autumn vibes'
+  },
+  fresh: {
+    name: 'Fresh', 
+    colors: ['#32CD32', '#98FB98', '#50C878', '#228B22'],
+    description: 'Vibrant lime, mint, emerald, avocado greens',
+    style: 'fresh vibrant green palette, spring energy, natural organic aesthetic'
+  },
+  jungle: {
+    name: 'Jungle',
+    colors: ['#355E3B', '#808000', '#6B8E23', '#228B22'], 
+    description: 'Deep jungle, olive, moss, pine greens',
+    style: 'deep jungle green palette, lush forest aesthetic, rich earth tones'
+  },
+  magic: {
+    name: 'Magic',
+    colors: ['#8A2BE2', '#E6E6FA', '#191970', '#FF69B4'],
+    description: 'Mystical purple, lavender, deep blue, rose',
+    style: 'mystical purple and lavender palette, magical dreamy atmosphere'
+  },
+  melon: {
+    name: 'Melon',
+    colors: ['#FF6B6B', '#FFA07A', '#32CD32', '#FFA500'],
+    description: 'Watermelon, peach, lime, orange fruits',
+    style: 'fresh fruit color palette, summery melon and citrus tones'
+  },
+  mosaic: {
+    name: 'Mosaic', 
+    colors: ['#FF1493', '#4169E1', '#40E0D0', '#FF8C00'],
+    description: 'Artistic fuchsia, royal blue, turquoise, orange',
+    style: 'bold artistic color palette, vibrant mosaic-inspired tones'
+  },
+  pastel: {
+    name: 'Pastel',
+    colors: ['#FFB6C1', '#87CEEB', '#F5F5DC', '#DDA0DD'],
+    description: 'Soft pink, sky blue, cream, light purple',
+    style: 'soft pastel color palette, dreamy ethereal aesthetic'
+  },
+  ultramarine: {
+    name: 'Ultramarine',
+    colors: ['#000080', '#4169E1', '#87CEEB', '#48D1CC'],
+    description: 'Navy, royal blue, sky blue, aquamarine',
+    style: 'sophisticated blue color palette, ocean-inspired tones'
+  },
+  auto: {
+    name: 'Auto',
+    colors: [],
+    description: 'AI-detected colors based on content',
+    style: 'color palette automatically selected based on content analysis'
+  }
+};
+
 // Generar pines para Pinterest
 exports.generatePins = async (req, res) => {
   try {
@@ -21,7 +79,8 @@ exports.generatePins = async (req, res) => {
     const { 
       title, 
       content = '', 
-      domain, 
+      domain,
+      color_palette = 'auto', 
       count = 1,
       style = 'modern',
       sector = null,
@@ -150,47 +209,83 @@ exports.generatePins = async (req, res) => {
         let imagePrompt;
         
         if (sectorConfig) {
-          // Usar configuración específica del sector con variaciones
-          const variations = [
-            'bright and colorful style',
-            'elegant and minimalist approach', 
-            'bold and energetic design',
-            'soft and inspiring aesthetic',
-            'modern and professional look'
+          // PROMPTS PROFESIONALES basados en análisis Pinterest
+          const professionalTemplates = {
+            'Recetas y Comida': [
+              'Ultra-realistic Pinterest food photography, cinematic lighting, shallow depth of field, rustic wooden surface with warm golden hour lighting',
+              'Mouthwatering food collage, magazine-style layout, multiple angles, rich saturated colors, restaurant-quality presentation',
+              'Artistic food photography, moody editorial style, dramatic shadows, minimalist composition with negative space'
+            ],
+            'Decoración del Hogar y DIY': [
+              'Clean modern Pinterest home inspiration, bright airy photography, natural lighting, Scandinavian-minimalist aesthetic',
+              'Pinterest DIY transformation, dramatic before/after visual, eye-catching textures, Instagram-worthy styling',
+              'Cozy home aesthetic, warm lighting, layered textures, lived-in comfort with design sophistication'
+            ],
+            'Moda Femenina': [
+              'High-fashion Pinterest style, editorial photography, perfect lighting, minimalist background, model confidence',
+              'Street style inspiration, urban backdrop, natural poses, trendy outfit coordination, lifestyle context',
+              'Wardrobe essentials flatlay, organized styling, neutral background, magazine-quality composition'
+            ]
+          };
+          
+          const templates = professionalTemplates[sectorConfig.name] || [
+            'Professional Pinterest aesthetic, high-quality photography, perfect lighting and composition',
+            'Editorial style visual, clean modern design, sophisticated color palette',
+            'Inspiring lifestyle photography, aspirational yet achievable, premium quality'
           ];
           
-          const currentVariation = variations[i % variations.length];
+          const currentTemplate = templates[i % templates.length];
           
           const textOverlay = with_text ? 
-            `Text overlay with "${title}" - variation ${i + 1}. Readable typography, clear hierarchy.` : 
-            'NO text overlay, purely visual design, no words or letters.';
+            `Bold typography overlay "${title}", elegant serif or modern sans-serif font, golden/cream color palette, perfect readability` : 
+            'NO text overlay, purely visual composition, no words or letters visible';
           
           const domainWatermark = show_domain && with_text ? 
-            `Small watermark with "${domain}" at bottom.` : 
-            'No watermark or domain visible.';
+            `Subtle elegant watermark "${domain}" at bottom corner, minimalist design` : 
+            'No watermark or domain text visible';
           
-          imagePrompt = `Pinterest pin for ${sectorConfig.name} - Variation ${i + 1}. 
-                        ${sectorConfig.ideogram.base}. 
-                        ${currentVariation}.
+          // Aplicar paleta de colores
+          const selectedPalette = COLOR_PALETTES[color_palette] || COLOR_PALETTES.auto;
+          const colorStyle = selectedPalette.style;
+          
+          imagePrompt = `Pinterest vertical pin 1000x2000px for ${sectorConfig.name}.
+                        ${currentTemplate}.
+                        ${colorStyle}.
+                        ${sectorConfig.ideogram.base}.
                         ${sectorConfig.ideogram.elements}.
                         ${textOverlay}
                         ${domainWatermark}
-                        Vertical 9:16 format optimized for Pinterest.`;
+                        Pinterest-optimized composition, trending aesthetic, scroll-stopping quality.`;
         } else {
-          // Prompt genérico adaptativo con variaciones
-          const variations = [
-            'vibrant and engaging',
-            'clean and professional', 
-            'creative and artistic',
-            'warm and inviting',
-            'bold and striking'
+          // PROMPTS GENÉRICOS PROFESIONALES
+          const professionalVariations = [
+            'Ultra-professional Pinterest aesthetic, high-end photography, cinematic lighting, magazine-quality composition',
+            'Clean modern editorial style, minimalist sophistication, premium visual appeal, trending Pinterest aesthetic', 
+            'Creative artistic approach, dramatic lighting, sophisticated color palette, Instagram-worthy composition',
+            'Warm inviting lifestyle photography, golden hour lighting, aspirational yet approachable aesthetic',
+            'Bold striking visual impact, high contrast, attention-grabbing composition, viral Pinterest potential'
           ];
           
-          const currentVariation = variations[i % variations.length];
+          const currentVariation = professionalVariations[i % professionalVariations.length];
           
           const textOverlay = with_text ? 
-            `Text overlay with title "${title}". Clear, readable typography - ${currentVariation} style.` : 
-            'NO text, purely visual imagery, no words.';
+            `Professional typography overlay "${title}", trending Pinterest font styles, perfect hierarchy and readability` : 
+            'NO text overlay, purely visual composition, no words or letters visible';
+          
+          const domainWatermark = show_domain && with_text ? 
+            `Subtle elegant watermark "${domain}" at bottom corner` : 
+            'No watermark visible';
+          
+          // Aplicar paleta de colores
+          const selectedPalette = COLOR_PALETTES[color_palette] || COLOR_PALETTES.auto;
+          const colorStyle = selectedPalette.style;
+          
+          imagePrompt = `Pinterest vertical pin 1000x2000px, professional quality.
+                        ${currentVariation}.
+                        ${colorStyle}.
+                        ${textOverlay}
+                        ${domainWatermark}
+                        Pinterest-trending composition, viral potential, scroll-stopping appeal.`;
           
           const domainWatermark = show_domain && with_text ? 
             `Include small "${domain}" watermark.` : 
