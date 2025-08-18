@@ -49,13 +49,21 @@ exports.authenticate = async (req, res, next) => {
 // Middleware para autenticación con API Key (usado por el plugin)
 exports.authenticateApiKey = async (req, res, next) => {
   try {
+    console.log('🔐 Auth middleware - Headers:', Object.keys(req.headers));
+    console.log('🔐 Auth middleware - x-api-key:', req.headers['x-api-key']);
+    console.log('🔐 Auth middleware - Path:', req.path);
+    console.log('🔐 Auth middleware - Method:', req.method);
+
     const apiKey = req.headers['x-api-key'];
 
     if (!apiKey) {
+      console.log('❌ No API key provided');
       return res.status(401).json({ 
         error: 'API key required' 
       });
     }
+
+    console.log('🔍 Looking up API key:', apiKey);
 
     const result = await db.query(
       `SELECT id, email, plan_type, monthly_credits, credits_used, reset_date
@@ -64,7 +72,10 @@ exports.authenticateApiKey = async (req, res, next) => {
       [apiKey]
     );
 
+    console.log('📊 Database query result:', result.rows.length, 'rows');
+
     if (result.rows.length === 0) {
+      console.log('❌ Invalid API key or inactive user');
       return res.status(401).json({ 
         error: 'Invalid API key' 
       });
@@ -95,13 +106,16 @@ exports.authenticateApiKey = async (req, res, next) => {
       });
     }
 
+    console.log('✅ Authentication successful for user:', user.email);
     req.user = user;
     next();
 
   } catch (error) {
-    console.error('API key authentication error:', error);
+    console.error('❌ API key authentication error:', error);
+    console.error('❌ Error stack:', error.stack);
     res.status(500).json({ 
-      error: 'Authentication failed' 
+      error: 'Authentication failed',
+      details: error.message 
     });
   }
 };
