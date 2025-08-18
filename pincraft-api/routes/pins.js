@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { body, query } = require('express-validator');
-const pinsController = require('../controllers/pinsController-simple');
+const pinsController = require('../controllers/pinsController');
 const { authenticateApiKey } = require('../middleware/auth');
 
 // Validaciones
