@@ -18,7 +18,7 @@ if (!defined('ABSPATH')) {
 }
 
 // Definir constantes
-define('PINCRAFT_VERSION', '2.3.0');
+define('PINCRAFT_VERSION', '2.4.0');
 define('PINCRAFT_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('PINCRAFT_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('PINCRAFT_PLUGIN_BASENAME', plugin_basename(__FILE__));
@@ -365,7 +365,7 @@ class PincraftWP_Professional {
                 'x-api-key' => $api_key
             ),
             'body' => json_encode($request_data),
-            'timeout' => 120
+            'timeout' => 180
         ));
         
         if (is_wp_error($response)) {

@@ -170,6 +170,108 @@ if (!defined('ABSPATH')) {
                                     </div>
                                     <span class="palette-name">Ultramarine</span>
                                 </div>
+                                
+                                <!-- PALETAS DE COMIDA -->
+                                <div class="palette-option" data-palette="pizza">
+                                    <div class="palette-preview">
+                                        <span style="background: #C72C41"></span>
+                                        <span style="background: #4CAF50"></span>
+                                        <span style="background: #FFF8DC"></span>
+                                        <span style="background: #8B4513"></span>
+                                    </div>
+                                    <span class="palette-name">🍕 Pizza</span>
+                                </div>
+                                
+                                <div class="palette-option" data-palette="fastfood">
+                                    <div class="palette-preview">
+                                        <span style="background: #FFC107"></span>
+                                        <span style="background: #DC143C"></span>
+                                        <span style="background: #FFFFFF"></span>
+                                        <span style="background: #8B4513"></span>
+                                    </div>
+                                    <span class="palette-name">🍟 Fast Food</span>
+                                </div>
+                                
+                                <div class="palette-option" data-palette="streetfood">
+                                    <div class="palette-preview">
+                                        <span style="background: #FF6B35"></span>
+                                        <span style="background: #004E64"></span>
+                                        <span style="background: #25A18E"></span>
+                                        <span style="background: #F7B801"></span>
+                                    </div>
+                                    <span class="palette-name">🌮 Street</span>
+                                </div>
+                                
+                                <div class="palette-option" data-palette="sushi">
+                                    <div class="palette-preview">
+                                        <span style="background: #2C3E50"></span>
+                                        <span style="background: #E74C3C"></span>
+                                        <span style="background: #ECEFF1"></span>
+                                        <span style="background: #27AE60"></span>
+                                    </div>
+                                    <span class="palette-name">🍣 Sushi</span>
+                                </div>
+                                
+                                <div class="palette-option" data-palette="cafe">
+                                    <div class="palette-preview">
+                                        <span style="background: #6F4E37"></span>
+                                        <span style="background: #C8AD88"></span>
+                                        <span style="background: #FFF8DC"></span>
+                                        <span style="background: #2F1B14"></span>
+                                    </div>
+                                    <span class="palette-name">☕ Café</span>
+                                </div>
+                                
+                                <div class="palette-option" data-palette="healthy">
+                                    <div class="palette-preview">
+                                        <span style="background: #8BC34A"></span>
+                                        <span style="background: #4CAF50"></span>
+                                        <span style="background: #CDDC39"></span>
+                                        <span style="background: #FFC107"></span>
+                                    </div>
+                                    <span class="palette-name">🥗 Healthy</span>
+                                </div>
+                                
+                                <div class="palette-option" data-palette="gourmet">
+                                    <div class="palette-preview">
+                                        <span style="background: #2C3E50"></span>
+                                        <span style="background: #BDC3C7"></span>
+                                        <span style="background: #D4AF37"></span>
+                                        <span style="background: #FFFFFF"></span>
+                                    </div>
+                                    <span class="palette-name">🍽️ Gourmet</span>
+                                </div>
+                                
+                                <div class="palette-option" data-palette="bbq">
+                                    <div class="palette-preview">
+                                        <span style="background: #8B2500"></span>
+                                        <span style="background: #FF4500"></span>
+                                        <span style="background: #FFD700"></span>
+                                        <span style="background: #4B0000"></span>
+                                    </div>
+                                    <span class="palette-name">🔥 BBQ</span>
+                                </div>
+                                
+                                <!-- PALETAS PROFESIONALES -->
+                                <div class="palette-option" data-palette="consultant">
+                                    <div class="palette-preview">
+                                        <span style="background: #1E3A5F"></span>
+                                        <span style="background: #4A90E2"></span>
+                                        <span style="background: #F5F5F5"></span>
+                                        <span style="background: #333333"></span>
+                                    </div>
+                                    <span class="palette-name">💼 Business</span>
+                                </div>
+                                
+                                <div class="palette-option" data-palette="tech">
+                                    <div class="palette-preview">
+                                        <span style="background: #00D4FF"></span>
+                                        <span style="background: #7B2CBF"></span>
+                                        <span style="background: #FF006E"></span>
+                                        <span style="background: #1A1A2E"></span>
+                                    </div>
+                                    <span class="palette-name">💻 Tech</span>
+                                </div>
                             </div>
                             
                             <input type="hidden" id="pincraft-color-palette" name="color_palette" value="auto" />

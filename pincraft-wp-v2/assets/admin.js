@@ -124,7 +124,7 @@
                     show_domain: showDomain ? 1 : 0,
                     nonce: pincraftAjax.nonce
                 },
-                timeout: 120000,
+                timeout: 180000,
                 success: function(response) {
                     console.log('PincraftWP: API Response:', response);
                     if (response.success) {
