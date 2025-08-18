@@ -18,49 +18,49 @@ const COLOR_PALETTES = {
     name: 'Ember',
     colors: ['#C44536', '#D4A574', '#8B4513', '#CD853F'],
     description: 'Warm coral, terracotta, golden, burgundy tones',
-    style: 'warm golden hour lighting, ember and terracotta color palette, cozy autumn vibes'
+    style: 'COLOR TONES ONLY: warm golden, terracotta, burgundy lighting. NO changes to food content.'
   },
   fresh: {
     name: 'Fresh', 
     colors: ['#32CD32', '#98FB98', '#50C878', '#228B22'],
     description: 'Vibrant lime, mint, emerald, avocado greens',
-    style: 'fresh vibrant green palette, spring energy, natural organic aesthetic'
+    style: 'COLOR TONES ONLY: vibrant green, lime, mint lighting. NO changes to food content.'
   },
   jungle: {
     name: 'Jungle',
     colors: ['#355E3B', '#808000', '#6B8E23', '#228B22'], 
     description: 'Deep jungle, olive, moss, pine greens',
-    style: 'deep jungle green palette, lush forest aesthetic, rich earth tones'
+    style: 'COLOR TONES ONLY: deep green, olive, moss lighting. NO changes to food content.'
   },
   magic: {
     name: 'Magic',
     colors: ['#8A2BE2', '#E6E6FA', '#191970', '#FF69B4'],
     description: 'Mystical purple, lavender, deep blue, rose',
-    style: 'mystical purple and lavender palette, magical dreamy atmosphere'
+    style: 'COLOR TONES ONLY: purple, lavender, pink lighting. NO changes to food content.'
   },
   melon: {
     name: 'Melon',
     colors: ['#FF6B6B', '#FFA07A', '#32CD32', '#FFA500'],
-    description: 'Watermelon, peach, lime, orange fruits',
-    style: 'fresh fruit color palette, summery melon and citrus tones'
+    description: 'Coral pink, peach, lime green, orange color tones',
+    style: 'COLOR TONES ONLY: coral pink, peach, orange lighting. NO fruit additions, NO melon ingredients, NO content changes.'
   },
   mosaic: {
     name: 'Mosaic', 
     colors: ['#FF1493', '#4169E1', '#40E0D0', '#FF8C00'],
     description: 'Artistic fuchsia, royal blue, turquoise, orange',
-    style: 'bold artistic color palette, vibrant mosaic-inspired tones'
+    style: 'COLOR TONES ONLY: fuchsia, blue, turquoise lighting. NO changes to food content.'
   },
   pastel: {
     name: 'Pastel',
     colors: ['#FFB6C1', '#87CEEB', '#F5F5DC', '#DDA0DD'],
     description: 'Soft pink, sky blue, cream, light purple',
-    style: 'soft pastel color palette, dreamy ethereal aesthetic'
+    style: 'COLOR TONES ONLY: soft pink, cream, light blue lighting. NO changes to food content.'
   },
   ultramarine: {
     name: 'Ultramarine',
     colors: ['#000080', '#4169E1', '#87CEEB', '#48D1CC'],
     description: 'Navy, royal blue, sky blue, aquamarine',
-    style: 'sophisticated blue color palette, ocean-inspired tones'
+    style: 'COLOR TONES ONLY: navy blue, royal blue, aqua lighting. NO changes to food content.'
   },
   auto: {
     name: 'Auto',
