@@ -48,30 +48,56 @@ exports.generatePins = async (req, res) => {
       messages: [
         {
           role: "system",
-          content: "Eres un experto en marketing de Pinterest. Crea títulos y descripciones optimizados para Pinterest que generen clics y engagement."
+          content: `Eres un experto en marketing de Pinterest. Tu trabajo es:
+          1. DETECTAR automáticamente el tipo de contenido (receta, tutorial, información, producto, etc)
+          2. ADAPTAR el estilo según el tipo detectado
+          3. CREAR títulos y descripciones optimizados para ese tipo específico de contenido
+          4. USAR el tono y lenguaje apropiado para cada nicho`
         },
         {
           role: "user",
-          content: `Crea un título y descripción para Pinterest basado en:
+          content: `Analiza este contenido y crea un pin optimizado:
+          
           Título: ${title}
           Contenido: ${content}
           Dominio: ${domain}
           
-          Formato de respuesta:
-          Título: [título optimizado de máximo 100 caracteres]
-          Descripción: [descripción de máximo 500 caracteres con hashtags relevantes]`
+          PRIMERO identifica el tipo de contenido, LUEGO genera:
+          
+          Tipo: [receta/tutorial/información/producto/lifestyle/otro]
+          Título: [título optimizado según el tipo, máximo 100 caracteres]
+          Descripción: [descripción adaptada al tipo de contenido, máximo 500 caracteres con hashtags relevantes]
+          Estilo Visual: [sugerencia de estilo para la imagen: minimalista/colorido/elegante/rústico/moderno]`
         }
       ],
-      max_tokens: 300
+      max_tokens: 400
     });
 
     const optimizedText = completion.choices[0].message.content;
     console.log('✅ OpenAI text generated:', optimizedText);
 
+    // Extraer tipo de contenido y estilo visual del texto optimizado
+    const contentType = optimizedText.match(/Tipo:\s*([^\n]+)/)?.[1] || 'general';
+    const visualStyle = optimizedText.match(/Estilo Visual:\s*([^\n]+)/)?.[1] || 'moderno';
+    
     // Generar imagen con Ideogram
     console.log('🎨 Generating image with Ideogram...');
+    console.log('📝 Content type detected:', contentType);
+    console.log('🎨 Visual style:', visualStyle);
     
-    const imagePrompt = `Beautiful Pinterest pin design for "${title}". Modern, eye-catching, vertical layout. Text overlay with elegant typography. Color scheme: vibrant and engaging. Professional design for food/lifestyle content. 9:16 aspect ratio.`;
+    // Adaptar el prompt según el tipo de contenido
+    let imagePromptBase = {
+      'receta': `Delicious food photography, ingredients visible, warm lighting, cooking process`,
+      'tutorial': `Step-by-step visual guide, clear instructions, numbered steps, educational`,
+      'información': `Infographic style, data visualization, clean layout, professional`,
+      'producto': `Product showcase, lifestyle photography, brand aesthetics, commercial quality`,
+      'lifestyle': `Aspirational imagery, aesthetic photography, mood board style`,
+      'otro': `Creative design, eye-catching visuals, Pinterest-optimized`
+    };
+    
+    const contextPrompt = imagePromptBase[contentType.toLowerCase()] || imagePromptBase['otro'];
+    
+    const imagePrompt = `Pinterest pin design: ${title}. ${contextPrompt}. Style: ${visualStyle}. Vertical 9:16 layout. Text overlay with readable typography. High engagement design optimized for Pinterest clicks and saves.`;
 
     const output = await replicate.run(
       "ideogram-ai/ideogram-v3-turbo:32a9584617b239dd119c773c8c18298d310068863d26499e6199538e9c29a586",
