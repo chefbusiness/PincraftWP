@@ -286,16 +286,6 @@ exports.generatePins = async (req, res) => {
                         ${textOverlay}
                         ${domainWatermark}
                         Pinterest-trending composition, viral potential, scroll-stopping appeal.`;
-          
-          const domainWatermark = show_domain && with_text ? 
-            `Include small "${domain}" watermark.` : 
-            '';
-          
-          imagePrompt = `Beautiful Pinterest pin design - Variation ${i + 1}. 
-                        ${textOverlay}
-                        ${domainWatermark}
-                        ${currentVariation}, vertical 9:16 layout. 
-                        Professional design optimized for Pinterest engagement.`;
         }
 
         const output = await replicate.run(
