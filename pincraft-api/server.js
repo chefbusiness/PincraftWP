@@ -4,6 +4,10 @@ const cors = require('cors');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 
+// Test database connection first
+const db = require('./config/database');
+console.log('📊 Database connection initialized');
+
 // Import routes
 const authRoutes = require('./routes/auth');
 const pinsRoutes = require('./routes/pins');

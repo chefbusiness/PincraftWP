@@ -10,9 +10,14 @@
       "Bash(cd:*)",
       "Bash(git push -u origin main)",
       "Bash(brew install:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(git push)",
+      "WebFetch(domain:pincraftwp-production.up.railway.app)"
     ],
     "deny": [],
-    "ask": []
+    "ask": [],
+    "additionalDirectories": [
+      "/Users/johnguerrero/Claude"
+    ]
   }
 }

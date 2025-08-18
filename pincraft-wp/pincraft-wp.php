@@ -58,7 +58,7 @@ function pincraft_activate() {
     // Configuraciones predeterminadas
     $default_settings = array(
         'pincraft_api_key' => '',
-        'api_endpoint' => 'https://api.pincraftwp.com/api/v1',
+        'api_endpoint' => 'https://pincraftwp-production.up.railway.app/api/v1',
         'default_pin_count' => 4,
         'max_pin_count' => 10,
         'enable_watermark' => true,

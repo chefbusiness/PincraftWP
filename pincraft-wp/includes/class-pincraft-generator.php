@@ -9,7 +9,7 @@ class Pincraft_Generator {
     private $api_key;
     
     public function __construct() {
-        $this->api_endpoint = get_option('pincraft_api_endpoint', 'https://api.pincraftwp.com/api/v1');
+        $this->api_endpoint = get_option('pincraft_api_endpoint', 'https://pincraftwp-production.up.railway.app/api/v1');
         $this->api_key = get_option('pincraft_api_key', '');
     }
     
