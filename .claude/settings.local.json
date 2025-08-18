@@ -5,7 +5,12 @@
       "Bash(cd:*)",
       "Bash(npm init:*)",
       "Bash(git init:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit -m \"Initial commit: PincraftWP - Plugin WordPress + API Backend para generación automática de pines de Pinterest\")",
+      "Bash(cd:*)",
+      "Bash(git push -u origin main)",
+      "Bash(brew install:*)",
+      "Bash(git commit:*)"
     ],
     "deny": [],
     "ask": []
