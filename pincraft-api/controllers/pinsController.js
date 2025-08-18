@@ -1,7 +1,7 @@
 const Replicate = require('replicate');
 const OpenAI = require('openai');
-const sharp = require('sharp');
 const db = require('../config/database');
+const { SECTORS } = require('../config/sectors');
 
 // Inicializar APIs
 const replicate = new Replicate({
@@ -15,20 +15,23 @@ const openai = new OpenAI({
 // Generar pines para Pinterest
 exports.generatePins = async (req, res) => {
   try {
+    console.log('🎨 Starting pin generation...');
+    console.log('📝 Request body:', req.body);
+
     const { 
       title, 
-      content, 
+      content = '', 
       domain, 
-      count = 4, 
+      count = 1,
       style = 'modern',
-      excerpt = '' 
+      sector = null,
+      show_domain = true,
+      with_text = true
     } = req.body;
 
     const userId = req.user.id;
 
-    console.log('🎨 Pin generation request:', { userId, title, domain, count });
-
-    // Validar parámetros
+    // Validar parámetros básicos
     if (!title || !domain) {
       return res.status(400).json({ 
         error: 'Title and domain are required' 
@@ -40,6 +43,9 @@ exports.generatePins = async (req, res) => {
         error: 'Pin count must be between 1 and 10' 
       });
     }
+
+    console.log('✅ Basic validation passed');
+    console.log(`🔢 Generating ${count} pins`);
 
     // Verificar créditos disponibles
     const userResult = await db.query(
@@ -58,225 +64,200 @@ exports.generatePins = async (req, res) => {
       });
     }
 
-    // Comenzar transacción
-    await client.query('BEGIN');
-
-    // Crear registro de generación
-    const generationResult = await client.query(
-      `INSERT INTO pin_generations 
-       (user_id, post_title, post_content, domain, pin_count, style, status)
-       VALUES ($1, $2, $3, $4, $5, $6, 'processing')
-       RETURNING id`,
-      [userId, title, content || excerpt, domain, count, style]
-    );
-
-    const generationId = generationResult.rows[0].id;
-
-    // Generar textos optimizados con OpenAI
-    const pinterestTexts = await generatePinterestTexts(title, content || excerpt, count);
-
     // Array para almacenar los pines generados
     const generatedPins = [];
+    const sectorConfig = sector && SECTORS[sector] ? SECTORS[sector] : null;
+
+    console.log('🎯 Selected sector:', sector);
+    console.log('⚙️ Sector config:', sectorConfig ? 'Found' : 'Using generic');
 
     // Generar cada pin
     for (let i = 0; i < count; i++) {
       try {
-        // Crear prompt para Ideogram
-        const imagePrompt = createImagePrompt(
-          pinterestTexts[i].title, 
-          domain, 
-          style
-        );
+        console.log(`🎨 Generating pin ${i + 1}/${count}...`);
 
-        // Generar imagen con Replicate/Ideogram
+        // Generar texto optimizado para Pinterest
+        let systemPrompt, userPrompt;
+        
+        if (sectorConfig) {
+          // Usar prompts específicos del sector
+          systemPrompt = `${sectorConfig.openai.system} 
+                         Crea contenido con tono: ${sectorConfig.openai.tone}.
+                         Usa estas palabras clave cuando sea relevante: ${sectorConfig.openai.keywords.join(', ')}.
+                         Variación ${i + 1} de ${count} - haz cada pin único y diferente.`;
+          
+          userPrompt = `Crea un pin optimizado para el sector "${sectorConfig.name}" (VARIACIÓN ${i + 1}):
+                       
+                       Título del post: ${title}
+                       Contenido: ${content}
+                       Dominio: ${show_domain ? domain : '[sin dominio]'}
+                       
+                       Genera:
+                       Título Pinterest: [máximo 100 caracteres, único para variación ${i + 1}]
+                       Descripción: [máximo 500 caracteres, incluye hashtags: ${sectorConfig.hashtags.join(' ')}]
+                       Call-to-action: [frase motivadora relacionada con ${sectorConfig.name}]`;
+        } else {
+          // Prompts genéricos con variaciones
+          systemPrompt = `Eres un experto en marketing de Pinterest. Tu trabajo es:
+                         1. DETECTAR automáticamente el tipo de contenido
+                         2. ADAPTAR el estilo según el tipo detectado
+                         3. CREAR títulos y descripciones optimizados
+                         4. GENERAR variación ${i + 1} de ${count} - cada pin debe ser único`;
+          
+          userPrompt = `Analiza este contenido y crea un pin optimizado (VARIACIÓN ${i + 1}):
+                       
+                       Título: ${title}
+                       Contenido: ${content}
+                       Dominio: ${show_domain ? domain : '[sin dominio]'}
+                       
+                       Genera:
+                       Tipo detectado: [tipo de contenido]
+                       Título Pinterest: [máximo 100 caracteres, único para variación ${i + 1}]
+                       Descripción: [máximo 500 caracteres con hashtags únicos]`;
+        }
+        
+        const completion = await openai.chat.completions.create({
+          model: "gpt-3.5-turbo",
+          messages: [
+            { role: "system", content: systemPrompt },
+            { role: "user", content: userPrompt }
+          ],
+          max_tokens: 400,
+          temperature: 0.7 + (i * 0.1) // Aumentar variabilidad en cada pin
+        });
+
+        const optimizedText = completion.choices[0].message.content;
+        console.log(`✅ Pin ${i + 1} text generated`);
+
+        // Generar imagen con Ideogram
+        console.log(`🎨 Generating image ${i + 1} with Ideogram...`);
+        
+        let imagePrompt;
+        
+        if (sectorConfig) {
+          // Usar configuración específica del sector con variaciones
+          const variations = [
+            'bright and colorful style',
+            'elegant and minimalist approach', 
+            'bold and energetic design',
+            'soft and inspiring aesthetic',
+            'modern and professional look'
+          ];
+          
+          const currentVariation = variations[i % variations.length];
+          
+          const textOverlay = with_text ? 
+            `Text overlay with "${title}" - variation ${i + 1}. Readable typography, clear hierarchy.` : 
+            'NO text overlay, purely visual design, no words or letters.';
+          
+          const domainWatermark = show_domain && with_text ? 
+            `Small watermark with "${domain}" at bottom.` : 
+            'No watermark or domain visible.';
+          
+          imagePrompt = `Pinterest pin for ${sectorConfig.name} - Variation ${i + 1}. 
+                        ${sectorConfig.ideogram.base}. 
+                        ${currentVariation}.
+                        ${sectorConfig.ideogram.elements}.
+                        ${textOverlay}
+                        ${domainWatermark}
+                        Vertical 9:16 format optimized for Pinterest.`;
+        } else {
+          // Prompt genérico adaptativo con variaciones
+          const variations = [
+            'vibrant and engaging',
+            'clean and professional', 
+            'creative and artistic',
+            'warm and inviting',
+            'bold and striking'
+          ];
+          
+          const currentVariation = variations[i % variations.length];
+          
+          const textOverlay = with_text ? 
+            `Text overlay with title "${title}". Clear, readable typography - ${currentVariation} style.` : 
+            'NO text, purely visual imagery, no words.';
+          
+          const domainWatermark = show_domain && with_text ? 
+            `Include small "${domain}" watermark.` : 
+            '';
+          
+          imagePrompt = `Beautiful Pinterest pin design - Variation ${i + 1}. 
+                        ${textOverlay}
+                        ${domainWatermark}
+                        ${currentVariation}, vertical 9:16 layout. 
+                        Professional design optimized for Pinterest engagement.`;
+        }
+
         const output = await replicate.run(
-          process.env.IDEOGRAM_MODEL || "ideogram-ai/ideogram-v3-turbo",
+          "ideogram-ai/ideogram-v3-turbo:32a9584617b239dd119c773c8c18298d310068863d26499e6199538e9c29a586",
           {
             input: {
               prompt: imagePrompt,
               aspect_ratio: "9:16",
-              width: parseInt(process.env.IMAGE_WIDTH) || 1080,
-              height: parseInt(process.env.IMAGE_HEIGHT) || 1920,
-              style_type: mapStyleToIdeogram(style),
-              magic_prompt_option: "ON"
+              style_type: "None",
+              magic_prompt_option: "Auto"
             }
           }
         );
 
-        // La respuesta de Ideogram viene como array
         const imageUrl = Array.isArray(output) ? output[0] : output;
-
-        // Guardar pin en la base de datos
-        const pinResult = await client.query(
-          `INSERT INTO pins 
-           (generation_id, user_id, image_url, pin_title, pin_description, hashtags)
-           VALUES ($1, $2, $3, $4, $5, $6)
-           RETURNING *`,
-          [
-            generationId,
-            userId,
-            imageUrl,
-            pinterestTexts[i].title,
-            pinterestTexts[i].description,
-            pinterestTexts[i].hashtags
-          ]
-        );
+        console.log(`✅ Pin ${i + 1} image generated:`, imageUrl);
 
         generatedPins.push({
-          id: pinResult.rows[0].id,
           image_url: imageUrl,
-          title: pinterestTexts[i].title,
-          description: pinterestTexts[i].description,
-          hashtags: pinterestTexts[i].hashtags
+          optimized_text: optimizedText,
+          original_title: title,
+          domain: domain,
+          variation: i + 1
         });
 
       } catch (pinError) {
-        console.error(`Error generating pin ${i + 1}:`, pinError);
+        console.error(`❌ Error generating pin ${i + 1}:`, pinError);
         // Continuar con los demás pines si uno falla
       }
     }
 
     // Actualizar créditos usados
-    await client.query(
+    await db.query(
       'UPDATE users SET credits_used = credits_used + $1 WHERE id = $2',
       [generatedPins.length, userId]
     );
 
-    // Actualizar estado de la generación
-    await client.query(
-      `UPDATE pin_generations 
-       SET status = 'completed', 
-           generated_pins = $1,
-           credits_used = $2,
-           completed_at = CURRENT_TIMESTAMP
-       WHERE id = $3`,
-      [JSON.stringify(generatedPins), generatedPins.length, generationId]
-    );
-
-    // Confirmar transacción
-    await client.query('COMMIT');
-
-    // Registrar uso de API
-    await logApiUsage(userId, '/pins/generate', 'POST', 200, generatedPins.length);
-
-    res.json({
+    // Respuesta final
+    const response = {
       success: true,
-      generation_id: generationId,
-      pins_generated: generatedPins.length,
-      credits_used: generatedPins.length,
-      remaining_credits: remainingCredits - generatedPins.length,
-      pins: generatedPins
-    });
+      data: {
+        pins: generatedPins,
+        credits_used: generatedPins.length,
+        message: `¡${generatedPins.length} ${generatedPins.length === 1 ? 'pin generado' : 'pines generados'} exitosamente!`
+      }
+    };
+
+    console.log(`🎉 Pin generation completed! Generated ${generatedPins.length}/${count} pins`);
+    res.json(response);
 
   } catch (error) {
-    await client.query('ROLLBACK');
-    console.error('Generate pins error:', error);
-    
+    console.error('❌ Error in pin generation:', error);
     res.status(500).json({ 
       error: 'Failed to generate pins',
-      message: error.message 
+      details: error.message 
     });
-  } finally {
-    client.release();
   }
 };
 
-// Función auxiliar para generar textos optimizados con OpenAI
-async function generatePinterestTexts(title, content, count) {
-  try {
-    const completion = await openai.chat.completions.create({
-      model: "gpt-4-turbo-preview",
-      messages: [
-        {
-          role: "system",
-          content: `You are a Pinterest marketing expert. Generate ${count} different variations of titles, descriptions, and hashtags for Pinterest pins based on the given blog post. 
-          
-          Requirements:
-          - Titles: Maximum 100 characters, catchy and engaging
-          - Descriptions: Maximum 450 characters, include call-to-action
-          - Hashtags: 5-10 relevant hashtags without # symbol
-          - Each variation should be unique and optimized for Pinterest SEO
-          
-          Return as JSON array with format:
-          [{"title": "...", "description": "...", "hashtags": ["hashtag1", "hashtag2", ...]}]`
-        },
-        {
-          role: "user",
-          content: `Blog Title: ${title}\n\nContent excerpt: ${content || title}`
-        }
-      ],
-      temperature: 0.8,
-      max_tokens: 2000,
-      response_format: { type: "json_object" }
-    });
-
-    const response = JSON.parse(completion.choices[0].message.content);
-    return response.variations || response;
-
-  } catch (error) {
-    console.error('OpenAI error:', error);
-    // Fallback: generar variaciones simples sin AI
-    return Array(count).fill(null).map((_, i) => ({
-      title: `${title} ${i > 0 ? `- Part ${i + 1}` : ''}`.substring(0, 100),
-      description: `Discover amazing insights about ${title}. Click to read more and transform your knowledge! 📌`.substring(0, 450),
-      hashtags: ['pinterest', 'pinterestideas', 'pinterestinspired', 'blog', 'tips']
-    }));
-  }
-}
-
-// Función auxiliar para crear prompt de imagen
-function createImagePrompt(title, domain, style) {
-  const stylePrompts = {
-    modern: "modern, clean, minimalist design with bold typography",
-    vibrant: "vibrant colors, energetic, eye-catching design",
-    elegant: "elegant, sophisticated, luxury aesthetic",
-    playful: "fun, playful, colorful with creative elements",
-    professional: "professional, corporate, business-oriented design"
-  };
-
-  return `Pinterest pin design for "${title}" | ${domain} | ${stylePrompts[style] || stylePrompts.modern} | 
-          Vertical 9:16 format | Text overlay with readable typography | High quality | Pinterest optimized`;
-}
-
-// Mapear estilos a opciones de Ideogram
-function mapStyleToIdeogram(style) {
-  const styleMap = {
-    modern: "REALISTIC",
-    vibrant: "DESIGN",
-    elegant: "REALISTIC", 
-    playful: "ANIME",
-    professional: "REALISTIC"
-  };
-  return styleMap[style] || "REALISTIC";
-}
-
-// Obtener historial de generaciones
+// Obtener historial de generaciones (simplificado)
 exports.getGenerationHistory = async (req, res) => {
   try {
     const userId = req.user.id;
-    const { limit = 20, offset = 0 } = req.query;
-
-    const result = await db.query(
-      `SELECT id, post_title, domain, pin_count, style, status, 
-              credits_used, created_at, completed_at
-       FROM pin_generations
-       WHERE user_id = $1
-       ORDER BY created_at DESC
-       LIMIT $2 OFFSET $3`,
-      [userId, limit, offset]
-    );
-
-    const countResult = await db.query(
-      'SELECT COUNT(*) FROM pin_generations WHERE user_id = $1',
-      [userId]
-    );
-
+    
+    // Por ahora retornamos historial vacío
+    // TODO: Implementar historial real en base de datos
     res.json({
       success: true,
-      data: result.rows,
-      total: parseInt(countResult.rows[0].count),
-      limit: parseInt(limit),
-      offset: parseInt(offset)
+      data: {
+        history: [],
+        total: 0
+      }
     });
 
   } catch (error) {
@@ -287,39 +268,14 @@ exports.getGenerationHistory = async (req, res) => {
   }
 };
 
-// Obtener detalles de una generación específica
+// Obtener detalles de una generación específica (simplificado)
 exports.getGenerationDetails = async (req, res) => {
   try {
-    const { id } = req.params;
-    const userId = req.user.id;
-
-    const result = await db.query(
-      `SELECT pg.*, 
-              json_agg(
-                json_build_object(
-                  'id', p.id,
-                  'image_url', p.image_url,
-                  'title', p.pin_title,
-                  'description', p.pin_description,
-                  'hashtags', p.hashtags
-                )
-              ) as pins
-       FROM pin_generations pg
-       LEFT JOIN pins p ON p.generation_id = pg.id
-       WHERE pg.id = $1 AND pg.user_id = $2
-       GROUP BY pg.id`,
-      [id, userId]
-    );
-
-    if (result.rows.length === 0) {
-      return res.status(404).json({ 
-        error: 'Generation not found' 
-      });
-    }
-
     res.json({
       success: true,
-      data: result.rows[0]
+      data: {
+        details: {}
+      }
     });
 
   } catch (error) {
@@ -329,17 +285,3 @@ exports.getGenerationDetails = async (req, res) => {
     });
   }
 };
-
-// Función auxiliar para registrar uso de API
-async function logApiUsage(userId, endpoint, method, statusCode, creditsConsumed = 0) {
-  try {
-    await db.query(
-      `INSERT INTO api_usage 
-       (user_id, endpoint, method, status_code, credits_consumed)
-       VALUES ($1, $2, $3, $4, $5)`,
-      [userId, endpoint, method, statusCode, creditsConsumed]
-    );
-  } catch (error) {
-    console.error('Error logging API usage:', error);
-  }
-}
