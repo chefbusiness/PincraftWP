@@ -18,7 +18,7 @@ if (!defined('ABSPATH')) {
 }
 
 // Definir constantes
-define('PINCRAFT_VERSION', '2.2.1');
+define('PINCRAFT_VERSION', '2.3.0');
 define('PINCRAFT_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('PINCRAFT_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('PINCRAFT_PLUGIN_BASENAME', plugin_basename(__FILE__));
@@ -330,6 +330,7 @@ class PincraftWP_Professional {
         $post_id = intval($_POST['post_id']);
         $pin_count = intval($_POST['pin_count']);
         $sector = sanitize_text_field($_POST['sector']);
+        $color_palette = sanitize_text_field($_POST['color_palette'] ?? 'auto');
         $with_text = isset($_POST['with_text']) && $_POST['with_text'] == '1';
         $show_domain = isset($_POST['show_domain']) && $_POST['show_domain'] == '1';
         
@@ -353,6 +354,7 @@ class PincraftWP_Professional {
             'domain' => parse_url(home_url(), PHP_URL_HOST),
             'count' => $pin_count,
             'sector' => $sector,
+            'color_palette' => $color_palette,
             'with_text' => $with_text,
             'show_domain' => $show_domain
         );

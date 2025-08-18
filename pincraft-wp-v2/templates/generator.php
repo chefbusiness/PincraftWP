@@ -80,6 +80,108 @@ if (!defined('ABSPATH')) {
                 </tr>
                 
                 <tr>
+                    <th scope="row">🎨 Paleta de Colores</th>
+                    <td>
+                        <div class="palette-selector">
+                            <div class="palette-grid">
+                                <div class="palette-option" data-palette="auto">
+                                    <div class="palette-preview auto">
+                                        <span class="palette-icon">🤖</span>
+                                    </div>
+                                    <span class="palette-name">Auto</span>
+                                </div>
+                                
+                                <div class="palette-option" data-palette="ember">
+                                    <div class="palette-preview">
+                                        <span style="background: #C44536"></span>
+                                        <span style="background: #D4A574"></span>
+                                        <span style="background: #8B4513"></span>
+                                        <span style="background: #CD853F"></span>
+                                    </div>
+                                    <span class="palette-name">Ember</span>
+                                </div>
+                                
+                                <div class="palette-option" data-palette="fresh">
+                                    <div class="palette-preview">
+                                        <span style="background: #32CD32"></span>
+                                        <span style="background: #98FB98"></span>
+                                        <span style="background: #50C878"></span>
+                                        <span style="background: #228B22"></span>
+                                    </div>
+                                    <span class="palette-name">Fresh</span>
+                                </div>
+                                
+                                <div class="palette-option" data-palette="jungle">
+                                    <div class="palette-preview">
+                                        <span style="background: #355E3B"></span>
+                                        <span style="background: #808000"></span>
+                                        <span style="background: #6B8E23"></span>
+                                        <span style="background: #228B22"></span>
+                                    </div>
+                                    <span class="palette-name">Jungle</span>
+                                </div>
+                                
+                                <div class="palette-option" data-palette="magic">
+                                    <div class="palette-preview">
+                                        <span style="background: #8A2BE2"></span>
+                                        <span style="background: #E6E6FA"></span>
+                                        <span style="background: #191970"></span>
+                                        <span style="background: #FF69B4"></span>
+                                    </div>
+                                    <span class="palette-name">Magic</span>
+                                </div>
+                                
+                                <div class="palette-option" data-palette="melon">
+                                    <div class="palette-preview">
+                                        <span style="background: #FF6B6B"></span>
+                                        <span style="background: #FFA07A"></span>
+                                        <span style="background: #32CD32"></span>
+                                        <span style="background: #FFA500"></span>
+                                    </div>
+                                    <span class="palette-name">Melon</span>
+                                </div>
+                                
+                                <div class="palette-option" data-palette="mosaic">
+                                    <div class="palette-preview">
+                                        <span style="background: #FF1493"></span>
+                                        <span style="background: #4169E1"></span>
+                                        <span style="background: #40E0D0"></span>
+                                        <span style="background: #FF8C00"></span>
+                                    </div>
+                                    <span class="palette-name">Mosaic</span>
+                                </div>
+                                
+                                <div class="palette-option" data-palette="pastel">
+                                    <div class="palette-preview">
+                                        <span style="background: #FFB6C1"></span>
+                                        <span style="background: #87CEEB"></span>
+                                        <span style="background: #F5F5DC"></span>
+                                        <span style="background: #DDA0DD"></span>
+                                    </div>
+                                    <span class="palette-name">Pastel</span>
+                                </div>
+                                
+                                <div class="palette-option" data-palette="ultramarine">
+                                    <div class="palette-preview">
+                                        <span style="background: #000080"></span>
+                                        <span style="background: #4169E1"></span>
+                                        <span style="background: #87CEEB"></span>
+                                        <span style="background: #48D1CC"></span>
+                                    </div>
+                                    <span class="palette-name">Ultramarine</span>
+                                </div>
+                            </div>
+                            
+                            <input type="hidden" id="pincraft-color-palette" name="color_palette" value="auto" />
+                            
+                            <p class="description">
+                                🎨 Selecciona una paleta de colores trending para tus pines. <strong>Auto</strong> detecta automáticamente la mejor paleta según el contenido.
+                            </p>
+                        </div>
+                    </td>
+                </tr>
+                
+                <tr>
                     <th scope="row">Vista Previa</th>
                     <td>
                         <div id="post-preview" style="display: none; background: #f9f9f9; padding: 15px; border-left: 4px solid #0073aa; margin-top: 10px;">

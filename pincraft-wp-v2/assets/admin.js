@@ -69,6 +69,20 @@
             }
         });
         
+        // Selector de paletas de colores
+        $('.palette-option').on('click', function() {
+            $('.palette-option').removeClass('selected');
+            $(this).addClass('selected');
+            
+            const palette = $(this).data('palette');
+            $('#pincraft-color-palette').val(palette);
+            
+            console.log('PincraftWP: Selected palette:', palette);
+        });
+        
+        // Seleccionar Auto por defecto
+        $('.palette-option[data-palette="auto"]').addClass('selected');
+        
         // Generar pines
         $('#pincraft-generate-form').on('submit', function(e) {
             e.preventDefault();
@@ -105,6 +119,7 @@
                     post_id: postId,
                     sector: sector,
                     pin_count: pinCount,
+                    color_palette: $('#pincraft-color-palette').val(),
                     with_text: withText ? 1 : 0,
                     show_domain: showDomain ? 1 : 0,
                     nonce: pincraftAjax.nonce
