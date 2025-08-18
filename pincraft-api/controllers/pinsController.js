@@ -62,6 +62,68 @@ const COLOR_PALETTES = {
     description: 'Navy, royal blue, sky blue, aquamarine',
     style: 'COLOR TONES ONLY: navy blue, royal blue, aqua lighting. NO changes to food content.'
   },
+  // PALETAS TEMÁTICAS DE COMIDA
+  pizza: {
+    name: 'Pizza',
+    colors: ['#C72C41', '#4CAF50', '#FFF8DC', '#8B4513'],
+    description: 'Tomato red, basil green, mozzarella white, crust brown',
+    style: 'COLOR TONES ONLY: Italian restaurant lighting - tomato red, basil green, creamy white, golden brown. NO changes to food content.'
+  },
+  fastfood: {
+    name: 'Fast Food',
+    colors: ['#FFC107', '#DC143C', '#FFFFFF', '#8B4513'],
+    description: 'McDonald\'s inspired - golden yellow, red, white, brown',
+    style: 'COLOR TONES ONLY: Fast food restaurant lighting - bright yellow, vibrant red, clean white. High contrast, appetizing. NO changes to food content.'
+  },
+  streetfood: {
+    name: 'Street Food',
+    colors: ['#FF6B35', '#004E64', '#25A18E', '#F7B801'],
+    description: 'Urban vibrant - orange, teal, turquoise, golden',
+    style: 'COLOR TONES ONLY: Street market lighting - warm orange, urban teal, golden highlights. Vibrant casual atmosphere. NO changes to food content.'
+  },
+  sushi: {
+    name: 'Sushi',
+    colors: ['#2C3E50', '#E74C3C', '#ECEFF1', '#27AE60'],
+    description: 'Japanese aesthetic - dark slate, salmon pink, rice white, wasabi green',
+    style: 'COLOR TONES ONLY: Japanese restaurant lighting - minimalist dark slate, salmon pink, pure white, wasabi green accents. NO changes to food content.'
+  },
+  cafe: {
+    name: 'Café',
+    colors: ['#6F4E37', '#C8AD88', '#FFF8DC', '#2F1B14'],
+    description: 'Coffee shop - espresso brown, latte beige, cream, dark roast',
+    style: 'COLOR TONES ONLY: Cozy cafe lighting - coffee browns, creamy beiges, warm atmosphere. NO changes to food content.'
+  },
+  healthy: {
+    name: 'Healthy',
+    colors: ['#8BC34A', '#4CAF50', '#CDDC39', '#FFC107'],
+    description: 'Fresh & organic - light green, green, lime, honey',
+    style: 'COLOR TONES ONLY: Health food lighting - fresh greens, organic tones, natural brightness. NO changes to food content.'
+  },
+  gourmet: {
+    name: 'Gourmet',
+    colors: ['#2C3E50', '#BDC3C7', '#D4AF37', '#FFFFFF'],
+    description: 'Fine dining - charcoal, silver, gold, white',
+    style: 'COLOR TONES ONLY: Fine dining lighting - elegant charcoal, metallic silver, gold accents, pristine white. Luxurious atmosphere. NO changes to food content.'
+  },
+  bbq: {
+    name: 'BBQ',
+    colors: ['#8B2500', '#FF4500', '#FFD700', '#4B0000'],
+    description: 'Grill & smoke - burnt sienna, fire orange, golden, dark red',
+    style: 'COLOR TONES ONLY: BBQ grill lighting - smoky reds, fire orange, golden char marks. Rustic outdoor atmosphere. NO changes to food content.'
+  },
+  // PALETAS PROFESIONALES
+  consultant: {
+    name: 'Consultant',
+    colors: ['#1E3A5F', '#4A90E2', '#F5F5F5', '#333333'],
+    description: 'Professional consulting - navy, corporate blue, light gray, charcoal',
+    style: 'COLOR TONES ONLY: Professional corporate lighting - trustworthy navy, clean blues, neutral grays. Business atmosphere. NO changes to content.'
+  },
+  tech: {
+    name: 'Tech',
+    colors: ['#00D4FF', '#7B2CBF', '#FF006E', '#1A1A2E'],
+    description: 'Tech startup - electric blue, purple, magenta, dark',
+    style: 'COLOR TONES ONLY: Tech modern lighting - electric blue, innovative purple, digital magenta, dark backgrounds. NO changes to content.'
+  },
   auto: {
     name: 'Auto',
     colors: [],
