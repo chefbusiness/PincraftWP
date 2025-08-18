@@ -208,29 +208,34 @@ exports.generatePins = async (req, res) => {
         
         let imagePrompt;
         
-        // OPTIMIZACIÓN DE TÍTULOS - POLÍTICA "LESS IS MORE"
+        // OPTIMIZACIÓN DE TÍTULOS - SWEET SPOT 4-6 PALABRAS
         let optimizedTitle = title;
         if (with_text && title) {
-          // Limitar a máximo 4 palabras clave para mejor legibilidad
           const words = title.split(' ');
-          if (words.length > 4) {
-            // Extraer palabras clave más importantes
+          
+          // Si el título es muy largo (>6 palabras), optimizar
+          if (words.length > 6) {
+            // Filtrar palabras vacías pero mantener las importantes
+            const stopWords = ['para', 'con', 'una', 'del', 'de', 'la', 'las', 'los', 'el', 'en', 'que', 'como', 'esta', 'este', 'nuestra', 'nuestro'];
             const keyWords = words.filter(word => 
-              word.length > 3 && 
-              !['para', 'con', 'una', 'del', 'las', 'los', 'que', 'como', 'esta', 'este'].includes(word.toLowerCase())
-            ).slice(0, 3);
-            optimizedTitle = keyWords.join(' ');
+              word.length > 2 && 
+              !stopWords.includes(word.toLowerCase())
+            );
+            
+            // Tomar las mejores 4-5 palabras clave
+            if (keyWords.length >= 4) {
+              optimizedTitle = keyWords.slice(0, 5).join(' ');
+            } else {
+              // Si no hay suficientes keywords, tomar las primeras 5-6 palabras
+              optimizedTitle = words.slice(0, 6).join(' ');
+            }
           }
-          // Si queda muy corto, tomar las primeras 3-4 palabras importantes
-          if (optimizedTitle.length < 10) {
-            optimizedTitle = words.slice(0, 4).join(' ');
-          }
-          // Límite absoluto de caracteres
-          if (optimizedTitle.length > 25) {
-            optimizedTitle = optimizedTitle.substring(0, 25).trim();
-            // Evitar cortar palabras por la mitad
+          
+          // Límite de caracteres más generoso para mejor legibilidad
+          if (optimizedTitle.length > 45) {
+            optimizedTitle = optimizedTitle.substring(0, 45).trim();
             const lastSpace = optimizedTitle.lastIndexOf(' ');
-            if (lastSpace > 15) {
+            if (lastSpace > 30) {
               optimizedTitle = optimizedTitle.substring(0, lastSpace);
             }
           }
