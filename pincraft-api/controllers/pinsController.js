@@ -208,9 +208,39 @@ exports.generatePins = async (req, res) => {
         
         let imagePrompt;
         
+        // OPTIMIZACIÓN DE TÍTULOS - POLÍTICA "LESS IS MORE"
+        let optimizedTitle = title;
+        if (with_text && title) {
+          // Limitar a máximo 4 palabras clave para mejor legibilidad
+          const words = title.split(' ');
+          if (words.length > 4) {
+            // Extraer palabras clave más importantes
+            const keyWords = words.filter(word => 
+              word.length > 3 && 
+              !['para', 'con', 'una', 'del', 'las', 'los', 'que', 'como', 'esta', 'este'].includes(word.toLowerCase())
+            ).slice(0, 3);
+            optimizedTitle = keyWords.join(' ');
+          }
+          // Si queda muy corto, tomar las primeras 3-4 palabras importantes
+          if (optimizedTitle.length < 10) {
+            optimizedTitle = words.slice(0, 4).join(' ');
+          }
+          // Límite absoluto de caracteres
+          if (optimizedTitle.length > 25) {
+            optimizedTitle = optimizedTitle.substring(0, 25).trim();
+            // Evitar cortar palabras por la mitad
+            const lastSpace = optimizedTitle.lastIndexOf(' ');
+            if (lastSpace > 15) {
+              optimizedTitle = optimizedTitle.substring(0, lastSpace);
+            }
+          }
+        }
+        
+        console.log(`🎯 Title optimization: "${title}" → "${optimizedTitle}"`);
+        
         // Declarar variables comunes una sola vez
         const textOverlay = with_text ? 
-          `Professional typography overlay "${title}", trending Pinterest font styles, perfect hierarchy and readability` : 
+          `Bold, clean typography overlay with ONLY these exact words: "${optimizedTitle}". Maximum 3-4 words, large readable font, no additional text, no paragraphs, no descriptions` : 
           'NO text overlay, purely visual composition, no words or letters visible';
         
         const domainWatermark = show_domain && with_text ? 
@@ -258,6 +288,7 @@ exports.generatePins = async (req, res) => {
                         ${sectorConfig.ideogram.elements}.
                         ${textOverlay}
                         ${domainWatermark}
+                        CRITICAL: Text overlay must be EXACTLY as specified, no additional words, no creative variations, no extra descriptions.
                         Pinterest-optimized composition, trending aesthetic, scroll-stopping quality.`;
         } else {
           // PROMPTS GENÉRICOS PROFESIONALES
@@ -278,6 +309,7 @@ exports.generatePins = async (req, res) => {
                         ${colorStyle}.
                         ${textOverlay}
                         ${domainWatermark}
+                        CRITICAL: If text overlay requested, use ONLY the exact words specified, no additional text, no creative additions.
                         Pinterest-trending composition, viral potential, scroll-stopping appeal.`;
         }
 
