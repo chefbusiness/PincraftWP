@@ -277,35 +277,25 @@ exports.generatePins = async (req, res) => {
         
         let imagePrompt;
         
-        // OPTIMIZACIÓN DEL TÍTULO ESPECÍFICO PARA OVERLAY
+        // USAR TÍTULO COMPLETO SIN EMOJIS PARA MEJOR FLUIDEZ
         let optimizedTitle = pinterestTitle;
         if (with_text && pinterestTitle) {
-          const words = pinterestTitle.split(' ');
+          // Eliminar solo emojis pero mantener texto completo
+          optimizedTitle = pinterestTitle.replace(/[\u{1F600}-\u{1F64F}]|[\u{1F300}-\u{1F5FF}]|[\u{1F680}-\u{1F6FF}]|[\u{1F1E0}-\u{1F1FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]/gu, '').trim();
           
-          // Si el título es muy largo (>6 palabras), optimizar
-          if (words.length > 6) {
-            // Filtrar palabras vacías pero mantener las importantes
-            const stopWords = ['para', 'con', 'una', 'del', 'de', 'la', 'las', 'los', 'el', 'en', 'que', 'como', 'esta', 'este', 'nuestra', 'nuestro'];
-            const keyWords = words.filter(word => 
-              word.length > 2 && 
-              !stopWords.includes(word.toLowerCase())
-            );
-            
-            // Tomar las mejores 4-5 palabras clave
-            if (keyWords.length >= 4) {
-              optimizedTitle = keyWords.slice(0, 5).join(' ');
-            } else {
-              // Si no hay suficientes keywords, tomar las primeras 5-6 palabras
-              optimizedTitle = words.slice(0, 6).join(' ');
-            }
-          }
+          // Limpiar espacios extra y signos redundantes
+          optimizedTitle = optimizedTitle.replace(/\s+/g, ' ').replace(/[¡!]{2,}/g, '!').replace(/[¿?]{2,}/g, '?');
           
-          // Límite de caracteres más generoso para mejor legibilidad
-          if (optimizedTitle.length > 45) {
-            optimizedTitle = optimizedTitle.substring(0, 45).trim();
+          // Solo limitar si es extremadamente largo (más de 80 caracteres)
+          if (optimizedTitle.length > 80) {
+            optimizedTitle = optimizedTitle.substring(0, 75).trim();
             const lastSpace = optimizedTitle.lastIndexOf(' ');
-            if (lastSpace > 30) {
+            if (lastSpace > 60) {
               optimizedTitle = optimizedTitle.substring(0, lastSpace);
+            }
+            // Agregar puntos suspensivos si se cortó
+            if (optimizedTitle.length < pinterestTitle.replace(/[\u{1F600}-\u{1F64F}]|[\u{1F300}-\u{1F5FF}]|[\u{1F680}-\u{1F6FF}]|[\u{1F1E0}-\u{1F1FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]/gu, '').trim().length) {
+              optimizedTitle += '...';
             }
           }
         }
