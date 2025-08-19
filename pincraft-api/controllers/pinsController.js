@@ -265,15 +265,22 @@ exports.generatePins = async (req, res) => {
         const optimizedText = completion.choices[0].message.content;
         console.log(`✅ Pin ${i + 1} text generated`);
 
+        // EXTRAER TÍTULO ESPECÍFICO GENERADO POR OPENAI
+        let pinterestTitle = title; // fallback
+        const titleMatch = optimizedText.match(/Título Pinterest:\s*(.+)/i);
+        if (titleMatch) {
+          pinterestTitle = titleMatch[1].trim();
+        }
+
         // Generar imagen con Ideogram
         console.log(`🎨 Generating image ${i + 1} with Ideogram...`);
         
         let imagePrompt;
         
-        // OPTIMIZACIÓN DE TÍTULOS - SWEET SPOT 4-6 PALABRAS
-        let optimizedTitle = title;
-        if (with_text && title) {
-          const words = title.split(' ');
+        // OPTIMIZACIÓN DEL TÍTULO ESPECÍFICO PARA OVERLAY
+        let optimizedTitle = pinterestTitle;
+        if (with_text && pinterestTitle) {
+          const words = pinterestTitle.split(' ');
           
           // Si el título es muy largo (>6 palabras), optimizar
           if (words.length > 6) {
@@ -303,7 +310,7 @@ exports.generatePins = async (req, res) => {
           }
         }
         
-        console.log(`🎯 Title optimization: "${title}" → "${optimizedTitle}"`);
+        console.log(`🎯 Pin ${i + 1} title optimization: "${pinterestTitle}" → "${optimizedTitle}"`);
         
         // Declarar variables comunes una sola vez
         const textOverlay = with_text ? 
