@@ -255,6 +255,7 @@ exports.generatePins = async (req, res) => {
                        Descripción: [máximo 500 caracteres con hashtags únicos]`;
         }
         
+        console.log(`🤖 Calling OpenAI for pin ${i + 1}...`);
         const completion = await openai.chat.completions.create({
           model: "gpt-4o-mini",
           messages: [
@@ -281,7 +282,7 @@ exports.generatePins = async (req, res) => {
         });
 
         const optimizedText = completion.choices[0].message.content;
-        console.log(`✅ Pin ${i + 1} text generated`);
+        console.log(`✅ Pin ${i + 1} text generated:`, optimizedText.substring(0, 100) + '...');
 
         // EXTRAER TÍTULO ESPECÍFICO GENERADO POR OPENAI
         let pinterestTitle = title; // fallback
@@ -396,6 +397,7 @@ exports.generatePins = async (req, res) => {
                         Pinterest-trending composition, viral potential, scroll-stopping appeal.`;
         }
 
+        console.log(`🎨 Calling Ideogram for pin ${i + 1} with prompt:`, imagePrompt.substring(0, 200) + '...');
         const output = await replicate.run(
           "ideogram-ai/ideogram-v3-turbo:32a9584617b239dd119c773c8c18298d310068863d26499e6199538e9c29a586",
           {
@@ -407,6 +409,7 @@ exports.generatePins = async (req, res) => {
             }
           }
         );
+        console.log(`🎨 Ideogram responded for pin ${i + 1}:`, output);
 
         const imageUrl = Array.isArray(output) ? output[0] : output;
         console.log(`✅ Pin ${i + 1} image generated:`, imageUrl);
@@ -421,7 +424,9 @@ exports.generatePins = async (req, res) => {
 
       } catch (pinError) {
         console.error(`❌ Error generating pin ${i + 1}:`, pinError);
-        // Continuar con los demás pines si uno falla
+        console.error(`❌ Error stack:`, pinError.stack);
+        console.error(`❌ Error details:`, JSON.stringify(pinError, null, 2));
+        // Continuar con los demás pines si uno falla pero mostrar error detallado
       }
     }
 
