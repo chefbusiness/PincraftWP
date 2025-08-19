@@ -28,6 +28,33 @@ router.get('/debug-config', (req, res) => {
   res.json(envCheck);
 });
 
+// Test simple de OpenAI
+router.get('/test-openai', async (req, res) => {
+  try {
+    const OpenAI = require('openai');
+    const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+    
+    const completion = await openai.chat.completions.create({
+      model: "gpt-4o-mini",
+      messages: [{ role: "user", content: "Say 'test successful'" }],
+      max_tokens: 10
+    });
+    
+    res.json({ 
+      success: true, 
+      response: completion.choices[0].message.content,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.json({ 
+      success: false, 
+      error: error.message,
+      errorType: error.constructor.name,
+      timestamp: new Date().toISOString()
+    });
+  }
+});
+
 // Generar pines
 router.post('/generate', validateGenerate, pinsController.generatePins);
 

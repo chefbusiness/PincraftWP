@@ -18,129 +18,111 @@ const COLOR_PALETTES = {
     name: 'Ember',
     colors: ['#C44536', '#D4A574', '#8B4513', '#CD853F'],
     description: 'Warm coral, terracotta, golden, burgundy tones',
-    style: 'COLOR TONES ONLY: warm golden, terracotta, burgundy lighting. NO changes to food content.',
-    typography: 'Bold serif font in warm golden (#D4A574) or burgundy (#C44536), elegant autumn feel'
+    style: 'COLOR TONES ONLY: warm golden, terracotta, burgundy lighting. NO changes to food content.'
   },
   fresh: {
     name: 'Fresh', 
     colors: ['#32CD32', '#98FB98', '#50C878', '#228B22'],
     description: 'Vibrant lime, mint, emerald, avocado greens',
-    style: 'COLOR TONES ONLY: vibrant green, lime, mint lighting. NO changes to food content.',
-    typography: 'Clean modern sans-serif in vibrant green (#32CD32) or white, fresh organic energy'
+    style: 'COLOR TONES ONLY: vibrant green, lime, mint lighting. NO changes to food content.'
   },
   jungle: {
     name: 'Jungle',
     colors: ['#355E3B', '#808000', '#6B8E23', '#228B22'], 
     description: 'Deep jungle, olive, moss, pine greens',
-    style: 'COLOR TONES ONLY: deep green, olive, moss lighting. NO changes to food content.',
-    typography: 'Bold sans-serif in deep forest green (#355E3B) or cream white, natural rustic feel'
+    style: 'COLOR TONES ONLY: deep green, olive, moss lighting. NO changes to food content.'
   },
   magic: {
     name: 'Magic',
     colors: ['#8A2BE2', '#E6E6FA', '#191970', '#FF69B4'],
     description: 'Mystical purple, lavender, deep blue, rose',
-    style: 'COLOR TONES ONLY: purple, lavender, pink lighting. NO changes to food content.',
-    typography: 'Elegant serif font in mystical purple (#8A2BE2) or white, dreamy magical atmosphere'
+    style: 'COLOR TONES ONLY: purple, lavender, pink lighting. NO changes to food content.'
   },
   melon: {
     name: 'Melon',
     colors: ['#FF6B6B', '#FFA07A', '#32CD32', '#FFA500'],
     description: 'Coral pink, peach, lime green, orange color tones',
-    style: 'COLOR TONES ONLY: coral pink, peach, orange lighting. NO fruit additions, NO melon ingredients, NO content changes.',
-    typography: 'Playful rounded sans-serif in coral pink (#FF6B6B) or white, summery fresh vibe'
+    style: 'COLOR TONES ONLY: coral pink, peach, orange lighting. NO fruit additions, NO melon ingredients, NO content changes.'
   },
   mosaic: {
     name: 'Mosaic', 
     colors: ['#FF1493', '#4169E1', '#40E0D0', '#FF8C00'],
     description: 'Artistic fuchsia, royal blue, turquoise, orange',
-    style: 'COLOR TONES ONLY: fuchsia, blue, turquoise lighting. NO changes to food content.',
-    typography: 'Creative display font in royal blue (#4169E1) or white, artistic vibrant energy'
+    style: 'COLOR TONES ONLY: fuchsia, blue, turquoise lighting. NO changes to food content.'
   },
   pastel: {
     name: 'Pastel',
     colors: ['#FFB6C1', '#87CEEB', '#F5F5DC', '#DDA0DD'],
     description: 'Soft pink, sky blue, cream, light purple',
-    style: 'COLOR TONES ONLY: soft pink, cream, light blue lighting. NO changes to food content.',
-    typography: 'Soft script font in light purple (#DDA0DD) or charcoal, dreamy ethereal aesthetic'
+    style: 'COLOR TONES ONLY: soft pink, cream, light blue lighting. NO changes to food content.'
   },
   ultramarine: {
     name: 'Ultramarine',
     colors: ['#000080', '#4169E1', '#87CEEB', '#48D1CC'],
     description: 'Navy, royal blue, sky blue, aquamarine',
-    style: 'COLOR TONES ONLY: navy blue, royal blue, aqua lighting. NO changes to food content.',
-    typography: 'Professional sans-serif in navy blue (#000080) or white, sophisticated ocean elegance'
+    style: 'COLOR TONES ONLY: navy blue, royal blue, aqua lighting. NO changes to food content.'
   },
   // PALETAS TEMÁTICAS DE COMIDA
   pizza: {
     name: 'Pizza',
     colors: ['#C72C41', '#4CAF50', '#FFF8DC', '#8B4513'],
     description: 'Tomato red, basil green, mozzarella white, crust brown',
-    style: 'COLOR TONES ONLY: Italian restaurant lighting - tomato red, basil green, creamy white, golden brown. NO changes to food content.',
-    typography: 'Classic Italian serif font in tomato red (#C72C41) or cream white, authentic trattoria feel'
+    style: 'COLOR TONES ONLY: Italian restaurant lighting - tomato red, basil green, creamy white, golden brown. NO changes to food content.'
   },
   fastfood: {
     name: 'Fast Food',
     colors: ['#FFC107', '#DC143C', '#FFFFFF', '#8B4513'],
     description: 'McDonald\'s inspired - golden yellow, red, white, brown',
-    style: 'COLOR TONES ONLY: Fast food restaurant lighting - bright yellow, vibrant red, clean white. High contrast, appetizing. NO changes to food content.',
-    typography: 'Bold rounded sans-serif in golden yellow (#FFC107) or red (#DC143C), fun fast-food energy'
+    style: 'COLOR TONES ONLY: Fast food restaurant lighting - bright yellow, vibrant red, clean white. High contrast, appetizing. NO changes to food content.'
   },
   streetfood: {
     name: 'Street Food',
     colors: ['#FF6B35', '#004E64', '#25A18E', '#F7B801'],
     description: 'Urban vibrant - orange, teal, turquoise, golden',
-    style: 'COLOR TONES ONLY: Street market lighting - warm orange, urban teal, golden highlights. Vibrant casual atmosphere. NO changes to food content.',
-    typography: 'Urban graffiti-style font in bright orange (#FF6B35) or white, street market vibe'
+    style: 'COLOR TONES ONLY: Street market lighting - warm orange, urban teal, golden highlights. Vibrant casual atmosphere. NO changes to food content.'
   },
   sushi: {
     name: 'Sushi',
     colors: ['#2C3E50', '#E74C3C', '#ECEFF1', '#27AE60'],
     description: 'Japanese aesthetic - dark slate, salmon pink, rice white, wasabi green',
-    style: 'COLOR TONES ONLY: Japanese restaurant lighting - minimalist dark slate, salmon pink, pure white, wasabi green accents. NO changes to food content.',
-    typography: 'Clean minimalist sans-serif in dark slate (#2C3E50) or white, zen Japanese aesthetic'
+    style: 'COLOR TONES ONLY: Japanese restaurant lighting - minimalist dark slate, salmon pink, pure white, wasabi green accents. NO changes to food content.'
   },
   cafe: {
     name: 'Café',
     colors: ['#6F4E37', '#C8AD88', '#FFF8DC', '#2F1B14'],
     description: 'Coffee shop - espresso brown, latte beige, cream, dark roast',
-    style: 'COLOR TONES ONLY: Cozy cafe lighting - coffee browns, creamy beiges, warm atmosphere. NO changes to food content.',
-    typography: 'Cozy script font in espresso brown (#6F4E37) or cream, warm coffee shop atmosphere'
+    style: 'COLOR TONES ONLY: Cozy cafe lighting - coffee browns, creamy beiges, warm atmosphere. NO changes to food content.'
   },
   healthy: {
     name: 'Healthy',
     colors: ['#8BC34A', '#4CAF50', '#CDDC39', '#FFC107'],
     description: 'Fresh & organic - light green, green, lime, honey',
-    style: 'COLOR TONES ONLY: Health food lighting - fresh greens, organic tones, natural brightness. NO changes to food content.',
-    typography: 'Natural sans-serif in fresh green (#4CAF50) or white, organic health-focused feel'
+    style: 'COLOR TONES ONLY: Health food lighting - fresh greens, organic tones, natural brightness. NO changes to food content.'
   },
   gourmet: {
     name: 'Gourmet',
     colors: ['#2C3E50', '#BDC3C7', '#D4AF37', '#FFFFFF'],
     description: 'Fine dining - charcoal, silver, gold, white',
-    style: 'COLOR TONES ONLY: Fine dining lighting - elegant charcoal, metallic silver, gold accents, pristine white. Luxurious atmosphere. NO changes to food content.',
-    typography: 'Luxury serif font in gold (#D4AF37) or charcoal (#2C3E50), high-end restaurant elegance'
+    style: 'COLOR TONES ONLY: Fine dining lighting - elegant charcoal, metallic silver, gold accents, pristine white. Luxurious atmosphere. NO changes to food content.'
   },
   bbq: {
     name: 'BBQ',
     colors: ['#8B2500', '#FF4500', '#FFD700', '#4B0000'],
     description: 'Grill & smoke - burnt sienna, fire orange, golden, dark red',
-    style: 'COLOR TONES ONLY: BBQ grill lighting - smoky reds, fire orange, golden char marks. Rustic outdoor atmosphere. NO changes to food content.',
-    typography: 'Rustic western font in fire orange (#FF4500) or cream, smoky BBQ character'
+    style: 'COLOR TONES ONLY: BBQ grill lighting - smoky reds, fire orange, golden char marks. Rustic outdoor atmosphere. NO changes to food content.'
   },
   // PALETAS PROFESIONALES
   consultant: {
     name: 'Consultant',
     colors: ['#1E3A5F', '#4A90E2', '#F5F5F5', '#333333'],
     description: 'Professional consulting - navy, corporate blue, light gray, charcoal',
-    style: 'COLOR TONES ONLY: Professional corporate lighting - trustworthy navy, clean blues, neutral grays. Business atmosphere. NO changes to content.',
-    typography: 'Corporate sans-serif in navy blue (#1E3A5F) or white, professional business credibility'
+    style: 'COLOR TONES ONLY: Professional corporate lighting - trustworthy navy, clean blues, neutral grays. Business atmosphere. NO changes to content.'
   },
   tech: {
     name: 'Tech',
     colors: ['#00D4FF', '#7B2CBF', '#FF006E', '#1A1A2E'],
     description: 'Tech startup - electric blue, purple, magenta, dark',
-    style: 'COLOR TONES ONLY: Tech modern lighting - electric blue, innovative purple, digital magenta, dark backgrounds. NO changes to content.',
-    typography: 'Modern tech font in electric blue (#00D4FF) or white, futuristic innovation vibe'
+    style: 'COLOR TONES ONLY: Tech modern lighting - electric blue, innovative purple, digital magenta, dark backgrounds. NO changes to content.'
   },
   auto: {
     name: 'Auto',
@@ -255,7 +237,6 @@ exports.generatePins = async (req, res) => {
                        Descripción: [máximo 500 caracteres con hashtags únicos]`;
         }
         
-        console.log(`🤖 Calling OpenAI for pin ${i + 1}...`);
         const completion = await openai.chat.completions.create({
           model: "gpt-4o-mini",
           messages: [
@@ -282,7 +263,7 @@ exports.generatePins = async (req, res) => {
         });
 
         const optimizedText = completion.choices[0].message.content;
-        console.log(`✅ Pin ${i + 1} text generated:`, optimizedText.substring(0, 100) + '...');
+        console.log(`✅ Pin ${i + 1} text generated`);
 
         // EXTRAER TÍTULO ESPECÍFICO GENERADO POR OPENAI
         let pinterestTitle = title; // fallback
@@ -323,17 +304,16 @@ exports.generatePins = async (req, res) => {
         
         // Declarar variables comunes una sola vez
         const textOverlay = with_text ? 
-          `Typography overlay with ONLY these exact words: "${optimizedTitle}". ${typographyStyle}. Large readable text, perfect contrast, no additional text, no paragraphs, no descriptions` : 
+          `Bold, clean typography overlay with ONLY these exact words: "${optimizedTitle}". Maximum 3-4 words, large readable font, no additional text, no paragraphs, no descriptions` : 
           'NO text overlay, purely visual composition, no words or letters visible';
         
         const domainWatermark = show_domain && with_text ? 
           `Subtle elegant watermark "${domain}" at bottom corner, minimalist design` : 
           'No watermark or domain text visible';
         
-        // Aplicar paleta de colores y tipografía
+        // Aplicar paleta de colores
         const selectedPalette = COLOR_PALETTES[color_palette] || COLOR_PALETTES.auto;
         const colorStyle = selectedPalette.style;
-        const typographyStyle = selectedPalette.typography || 'Clean readable font in contrasting color';
         
         if (sectorConfig) {
           // PROMPTS PROFESIONALES basados en análisis Pinterest
@@ -397,7 +377,6 @@ exports.generatePins = async (req, res) => {
                         Pinterest-trending composition, viral potential, scroll-stopping appeal.`;
         }
 
-        console.log(`🎨 Calling Ideogram for pin ${i + 1} with prompt:`, imagePrompt.substring(0, 200) + '...');
         const output = await replicate.run(
           "ideogram-ai/ideogram-v3-turbo:32a9584617b239dd119c773c8c18298d310068863d26499e6199538e9c29a586",
           {
@@ -409,7 +388,6 @@ exports.generatePins = async (req, res) => {
             }
           }
         );
-        console.log(`🎨 Ideogram responded for pin ${i + 1}:`, output);
 
         const imageUrl = Array.isArray(output) ? output[0] : output;
         console.log(`✅ Pin ${i + 1} image generated:`, imageUrl);
@@ -424,9 +402,7 @@ exports.generatePins = async (req, res) => {
 
       } catch (pinError) {
         console.error(`❌ Error generating pin ${i + 1}:`, pinError);
-        console.error(`❌ Error stack:`, pinError.stack);
-        console.error(`❌ Error details:`, JSON.stringify(pinError, null, 2));
-        // Continuar con los demás pines si uno falla pero mostrar error detallado
+        // Continuar con los demás pines si uno falla
       }
     }
 
