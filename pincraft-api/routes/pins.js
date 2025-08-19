@@ -15,6 +15,19 @@ const validateGenerate = [
 // Todas las rutas requieren autenticación con API Key
 router.use(authenticateApiKey);
 
+// Debug endpoint temporal
+router.get('/debug-config', (req, res) => {
+  const envCheck = {
+    hasOpenAI: !!process.env.OPENAI_API_KEY,
+    hasReplicate: !!process.env.REPLICATE_API_TOKEN,
+    openaiKeyPrefix: process.env.OPENAI_API_KEY ? process.env.OPENAI_API_KEY.substring(0, 8) + '...' : 'MISSING',
+    replicateKeyPrefix: process.env.REPLICATE_API_TOKEN ? process.env.REPLICATE_API_TOKEN.substring(0, 8) + '...' : 'MISSING',
+    nodeEnv: process.env.NODE_ENV,
+    timestamp: new Date().toISOString()
+  };
+  res.json(envCheck);
+});
+
 // Generar pines
 router.post('/generate', validateGenerate, pinsController.generatePins);
 
